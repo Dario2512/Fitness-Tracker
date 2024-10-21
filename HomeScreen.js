@@ -1,7 +1,10 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Button, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 const HomeScreen = () => {
+  const navigation = useNavigation();
+  
   const [heartRate, setHeartRate] = useState(0);
   const [spO2, setSpO2] = useState(0);
   const [temperature, setTemperature] = useState(0);
@@ -13,45 +16,57 @@ const HomeScreen = () => {
       setSpO2(Math.floor(Math.random() * (100 - 90 + 1) + 90)); 
       setTemperature((Math.random() * (38 - 36) + 36).toFixed(1)); 
       setSteps(Math.floor(Math.random() * 10000)); 
-    }, 3000); // refresh la 3 sec
+    }, 3000); 
 
     return () => clearInterval(interval); 
   }, []);
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.header}>Fitness Tracker</Text>
-      
-      <View style={styles.card}>
-        <Text style={styles.label}>Heart Rate:</Text>
-        <Text style={styles.value}>{heartRate} bpm</Text>
-      </View>
-      
-      <View style={styles.card}>
-        <Text style={styles.label}>SpO2:</Text>
-        <Text style={styles.value}>{spO2}%</Text>
-      </View>
-      
-      <View style={styles.card}>
-        <Text style={styles.label}>Temperature:</Text>
-        <Text style={styles.value}>{temperature}°C</Text>
-      </View>
+    <View style={styles.container}>
+      {/*Scrollabel part */}
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <Text style={styles.header}>Fitness Tracker</Text>
+        
+        <View style={styles.card}>
+          <Text style={styles.label}>Heart Rate:</Text>
+          <Text style={styles.value}>{heartRate} bpm</Text>
+        </View>
+        
+        <View style={styles.card}>
+          <Text style={styles.label}>SpO2:</Text>
+          <Text style={styles.value}>{spO2}%</Text>
+        </View>
+        
+        <View style={styles.card}>
+          <Text style={styles.label}>Temperature:</Text>
+          <Text style={styles.value}>{temperature}°C</Text>
+        </View>
 
-      <View style={styles.card}>
-        <Text style={styles.label}>Steps:</Text>
-        <Text style={styles.value}>{steps}</Text>
+        <View style={styles.card}>
+          <Text style={styles.label}>Steps:</Text>
+          <Text style={styles.value}>{steps}</Text>
+        </View>
+      </ScrollView>
+
+      {/* Buttons on the buttom of the screen */}
+      <View style={styles.buttonContainer}>
+        <Button title="Home" onPress={() => navigation.navigate('Home')} />
+        <Button title="Stats" onPress={() => navigation.navigate('Stats')} />
+        <Button title="User" onPress={() => navigation.navigate('User')} />
       </View>
-    </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
+    flex: 1,
+    backgroundColor: '#F5F5F5',
+  },
+  scrollContent: {
     justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 20,
-    backgroundColor: '#F5F5F5',
   },
   header: {
     fontSize: 28,
@@ -80,6 +95,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#000',
     marginTop: 5,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingBottom: 25,
+    paddingTop: 10,
+    backgroundColor: '#ddd',
+    borderTopWidth: 1,
+    borderTopColor: '#acacac',
   },
 });
 
