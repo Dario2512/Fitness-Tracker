@@ -1,10 +1,15 @@
-import { useNavigation } from '@react-navigation/native';
+
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { signOut } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { Button, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { auth } from './firebaseConfig';
 
 const HomeScreen = () => {
   const navigation = useNavigation();
-  
+  const route = useRoute(); 
+  const { email } = route.params; 
+
   const [heartRate, setHeartRate] = useState(0);
   const [spO2, setSpO2] = useState(0);
   const [temperature, setTemperature] = useState(0);
@@ -21,11 +26,31 @@ const HomeScreen = () => {
     return () => clearInterval(interval); 
   }, []);
 
+  const handleLogout = () => {
+    signOut(auth)
+      .then(() => {
+        console.log('User signed out!');
+        navigation.navigate('SignInScreen'); 
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  // Set the logout button in the header
+  React.useEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <Button title="Logout" onPress={handleLogout} />
+      ),
+    });
+  }, [navigation]);
+
   return (
     <View style={styles.container}>
-      {/*Scrollabel part */}
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <Text style={styles.header}>Fitness Tracker</Text>
+        <Text style={styles.userEmail}>Logged in as: {email}</Text> 
         
         <View style={styles.card}>
           <Text style={styles.label}>Heart Rate:</Text>
@@ -48,9 +73,7 @@ const HomeScreen = () => {
         </View>
       </ScrollView>
 
-      {/* Buttons on the buttom of the screen */}
       <View style={styles.buttonContainer}>
-        <Button title="Home" onPress={() => navigation.navigate('Home')} />
         <Button title="Stats" onPress={() => navigation.navigate('Stats')} />
         <Button title="User" onPress={() => navigation.navigate('User')} />
       </View>
@@ -73,6 +96,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 30,
     color: '#333',
+  },
+  userEmail: {
+    fontSize: 16,
+    color: '#333',
+    marginBottom: 20,
   },
   card: {
     width: '90%',
