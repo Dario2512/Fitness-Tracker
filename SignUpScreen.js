@@ -1,9 +1,8 @@
-// SignUpScreen.js
 
-import { createUserWithEmailAndPassword } from 'firebase/auth'; // Adjust the import
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import React, { useState } from 'react';
 import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
-import { auth } from './firebaseConfig'; // Adjust the path as necessary
+import { auth } from './firebaseConfig';
 
 const SignUpScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -20,7 +19,7 @@ const SignUpScreen = ({ navigation }) => {
     createUserWithEmailAndPassword(auth, email, password)
       .then(() => {
         console.log('User account created & signed in!');
-        navigation.navigate('SignInScreen'); // Ensure it matches your Home screen name
+        navigation.navigate('SignInScreen'); 
       })
       .catch(error => {
         if (error.code === 'auth/email-already-in-use') {
