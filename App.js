@@ -25,7 +25,7 @@ export default function App() {
           name="Home" 
           component={HomeScreen} 
           options={{
-            headerShown: false, // Hide the header
+            headerShown: false, // This will completely hide the header, including the back button
           }} 
         />
         <Stack.Screen 
