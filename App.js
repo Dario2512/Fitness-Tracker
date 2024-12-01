@@ -16,25 +16,41 @@ export default function App() {
         <Stack.Screen 
           name="SignInScreen" 
           component={SignInScreen} 
+          options={{
+            headerShown: false,
+          }} 
         />
         <Stack.Screen 
           name="SignUpScreen" 
-          component={SignUpScreen} 
+          component={SignUpScreen}
+          options={{
+            headerShown: false,
+          }}  
         />
         <Stack.Screen 
           name="Home" 
           component={HomeScreen} 
           options={{
-            headerShown: false, // This will completely hide the header, including the back button
+            headerShown: false, 
           }} 
         />
         <Stack.Screen 
           name="User" 
           component={UserScreen} 
+          options={{
+            headerStyle: { backgroundColor: '#121212' }, 
+            headerTintColor: 'white',
+            headerTitle: 'User Info', 
+          }} 
         />
         <Stack.Screen 
           name="Stats" 
-          component={StatsScreen} 
+          component={StatsScreen}
+          options={{
+            headerStyle: { backgroundColor: '#121212' }, 
+            headerTintColor: 'white',
+            headerTitle: '', 
+          }} 
         />
       </Stack.Navigator>
     </NavigationContainer>

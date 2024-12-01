@@ -1,7 +1,8 @@
 import { doc, getDoc, getFirestore, updateDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
-import { Button, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Modal, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { auth } from './firebaseConfig';
+import styles from './stylesUser.js';
 
 const UserScreen = ({ navigation }) => {
   const [userData, setUserData] = useState({
@@ -13,8 +14,8 @@ const UserScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [isNewUser, setIsNewUser] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState(false); // Modal visibility
-  const [editedData, setEditedData] = useState({ ...userData }); // Store edited data
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [editedData, setEditedData] = useState({ ...userData });
 
   const db = getFirestore();
 
@@ -23,7 +24,6 @@ const UserScreen = ({ navigation }) => {
       try {
         const userId = auth.currentUser?.uid;
         if (!userId) {
-          // Redirect if user is not logged in
           navigation.navigate('SignInScreen');
           return;
         }
@@ -33,12 +33,11 @@ const UserScreen = ({ navigation }) => {
 
         if (userSnap.exists()) {
           const data = userSnap.data();
-          setUserData(data); // Display the current user data
-          setEditedData(data); // Initialize the modal with current user data
+          setUserData(data);
+          setEditedData(data);
 
-          // Check if required fields are missing
           if (!data.username || !data.age || !data.height || !data.weight) {
-            setIsNewUser(true); // Mark as new user if any field is missing
+            setIsNewUser(true);
           }
         } else {
           setError('No user data found!');
@@ -59,9 +58,9 @@ const UserScreen = ({ navigation }) => {
       const userId = auth.currentUser.uid;
       const userRef = doc(db, 'users', userId);
       await updateDoc(userRef, editedData);
-      setUserData(editedData); // Update userData with the new values
-      setIsModalVisible(false); // Close the modal after saving
-      navigation.navigate('Home'); // Navigate to the home screen after saving
+      setUserData(editedData);
+      setIsModalVisible(false);
+      navigation.navigate('Home');
     } catch (err) {
       console.error(err);
       setError('Failed to update user data');
@@ -85,24 +84,20 @@ const UserScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>User Setup</Text>
+      <Text style={styles.header}>Name: {userData.username}</Text>
       <View style={styles.userInfo}>
-        <Text>Username: {userData.username}</Text>
-        <Text>Age: {userData.age}</Text>
-        <Text>Height: {userData.height}</Text>
-        <Text>Weight: {userData.weight}</Text>
+        <Text style={styles.userInfoText}>Age: {userData.age} years</Text>
+        <Text style={styles.userInfoText}>Height: {userData.height} cm</Text>
+        <Text style={styles.userInfoText}>Weight: {userData.weight} kg</Text>
       </View>
 
-      <Button title="Edit Info" onPress={() => setIsModalVisible(true)} />
+      <TouchableOpacity onPress={() => setIsModalVisible(true)} style={styles.editButton}>
+        <Text style={{ color: 'white' }}>Edit Info</Text>
+      </TouchableOpacity>
 
-      {/* Modal for editing user data */}
-      <Modal
-        visible={isModalVisible}
-        animationType="slide"
-        onRequestClose={() => setIsModalVisible(false)}
-      >
+      <Modal visible={isModalVisible} animationType="fade" onRequestClose={() => setIsModalVisible(false)}>
         <View style={styles.modalContainer}>
-          <Text style={styles.header}>Edit User Details</Text>
+          <Text style={styles.header}>Edit Details:</Text>
           
           <TextInput
             style={styles.input}
@@ -132,26 +127,16 @@ const UserScreen = ({ navigation }) => {
             keyboardType="numeric"
           />
 
-          <TouchableOpacity onPress={handleEdit}>
-            <Text style={styles.button}>Save Changes</Text>
+          <TouchableOpacity onPress={handleEdit} style={styles.button}>
+            <Text style={{ color: 'white' }}>Save Changes</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setIsModalVisible(false)}>
-            <Text style={styles.button}>Cancel</Text>
+          <TouchableOpacity onPress={() => setIsModalVisible(false)} style={styles.buttonCancel}>
+            <Text style={{ color: 'white' }}>Cancel</Text>
           </TouchableOpacity>
         </View>
       </Modal>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20 },
-  header: { fontSize: 24, marginBottom: 20 },
-  userInfo: { marginBottom: 20 },
-  input: { borderWidth: 1, borderRadius: 5, padding: 10, marginBottom: 10 },
-  errorText: { color: 'red', textAlign: 'center', marginTop: 10 },
-  modalContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 },
-  button: { backgroundColor: '#007bff', color: 'white', padding: 10, textAlign: 'center', marginTop: 10 },
-});
 
 export default UserScreen;

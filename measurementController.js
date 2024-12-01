@@ -29,6 +29,7 @@ exports.handleMeasurement = async (req, res) => {
 
     // Save data to Firestore
     await db.collection('users').doc(userId).collection('measurements').add({
+      userId: userId,
       heartRate: heartRateAvg,
       spO2: spO2Avg,
       temperature: temperatureAvg,

@@ -4,83 +4,95 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#000', // Black background
+    backgroundColor: '#121212', // Black background for the whole screen
   },
+  // Logout button styling
   logoutButton: {
-    top: 20,
-    alignSelf: 'flex-start',
+    position: 'absolute',
+    top: 15,
+    left: 10,
     padding: 10,
   },
   logoutText: {
-    color: '#FF4D4D', // Bright red
+    color: '#FF4D4D', // Red logout button text
     fontSize: 16,
     fontWeight: 'bold',
   },
-  header: {
+  // App name styling
+  appNameContainer: {
+    alignItems: 'center',
+    marginTop: 50,
+    padding: 20 // Push down a little from the top
+  },
+  appName: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#FFF', // White text
-    textAlign: 'center',
-    marginVertical: 20,
+    color: '#FFF', // White text for app name
+  },
+  header: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#FFF', // White text for header
+    textAlign: 'start',
+    marginTop: 0,
+    marginBottom: 20,
   },
   lastMeasurement: {
-    backgroundColor: '#1A1A1A', // Dark gray
+    backgroundColor: '#1A1A1A', // Dark gray background for last measurement
     padding: 20,
     borderRadius: 10,
     marginBottom: 20,
-    elevation: 5,
-  },
-  cardTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#FFF',
-    marginBottom: 10,
+    elevation: 5, // Shadow for better visibility
   },
   measurementText: {
     fontSize: 18,
-    color: '#FFF', // White text
+    color: '#FFF', // White text for measurements
     marginVertical: 5,
   },
-  greenText: {
-    color: '#32CD32', // Bright green
-  },
-  noDataText: {
-    fontSize: 18,
-    color: '#FF4D4D', // Bright red
-    textAlign: 'center',
+  measureButtonContainer: {
+    alignItems: 'center',
     marginVertical: 20,
+    padding: 50
   },
   measureButton: {
-    backgroundColor: '#FF4D4D', // Bright red
+    backgroundColor: '#FF6347', // Tomato red for the measure button
     paddingVertical: 15,
+    paddingHorizontal: 20,
     borderRadius: 10,
     alignItems: 'center',
     marginVertical: 20,
   },
   measureButtonDisabled: {
-    backgroundColor: '#D3D3D3', // Light gray for disabled
+    backgroundColor: '#D3D3D3', // Light gray when disabled
   },
   measureButtonText: {
     fontSize: 18,
     color: '#FFF', // White text
     fontWeight: 'bold',
   },
-buttonContainer: {
-  position: 'absolute', // Position it at the bottom of the screen
-  bottom: 20,            // Align it to the bottom
-  left: 0,
-  right: 0,             // Stretch it horizontally
-  flexDirection: 'row',
-  justifyContent: 'space-around',
-  padding: 20,
-  backgroundColor: '#1A1A1A', // Dark gray background
-  borderTopLeftRadius: 10,
-  borderTopRightRadius: 10,
-}
-,
-  navButton: {
+  heartContainer: {
+    marginBottom: 50,
+  },
+  heartIcon: {
+    width: 150,  // Adjust the size as needed
+    height: 150,
+    resizeMode: 'contain',  // Ensure the image scales correctly
+  },
+  buttonContainer: {
+    position: 'absolute',
+    bottom: 0, // Align it to the bottom
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     padding: 15,
-    backgroundColor: '#FF4D4D', // Bright red
+    backgroundColor: '#1A1A1A', // Dark gray background for buttons
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+  },
+  navButton: {
+    padding: 10,
+    backgroundColor: '#FF6347', // Tomato red for navigation buttons
     borderRadius: 10,
     alignItems: 'center',
     width: '30%',
@@ -89,6 +101,7 @@ buttonContainer: {
     fontSize: 16,
     color: '#FFF', // White text
     fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
 
