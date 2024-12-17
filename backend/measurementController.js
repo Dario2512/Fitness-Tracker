@@ -1,6 +1,6 @@
 const { firestore } = require('firebase-admin');
 const admin = require('firebase-admin');
-const serviceAccount = require('./firebase-adminsdk.json');
+const serviceAccount = require('./firebase/firebase-adminsdk.json');
 
 if (!admin.apps.length) {
   admin.initializeApp({

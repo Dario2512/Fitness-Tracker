@@ -9,7 +9,7 @@ const stylesStats = StyleSheet.create({
   header: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#FFF', // White text for header
+    color: '#FFF',
     textAlign: 'center',
     marginBottom: 20,
   },
@@ -20,29 +20,47 @@ const stylesStats = StyleSheet.create({
   },
   loadingText: {
     fontSize: 18,
-    color: '#FFF', // White text for loading text
+    color: '#FFF',
     marginTop: 10,
   },
   card: {
-    backgroundColor: '#1A1A1A', // Dark gray background for cards
+    backgroundColor: '#1A1A1A',
     padding: 15,
     borderRadius: 10,
     marginBottom: 15,
-    elevation: 5, // Shadow for better visibility
-  },
-  cardTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#FF6347', // Tomato red for card title
-    marginBottom: 5,
+    elevation: 5,
   },
   cardText: {
     fontSize: 16,
-    color: '#FFF', // White text for card content
+    color: '#FFF',
     marginBottom: 3,
   },
   listContent: {
     paddingBottom: 20,
+  },
+  caloriesBox: {
+    backgroundColor: '#1A1A1A',
+    borderRadius: 10,
+    padding: 20,
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  caloriesHeader: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#FF6347',
+    marginBottom: 10,
+  },
+  caloriesValue: {
+    fontSize: 36,
+    fontWeight: 'bold',
+    color: '#FFF',
+  },
+  caloriesNote: {
+    fontSize: 14,
+    color: '#AAA',
+    marginTop: 10,
+    textAlign: 'center',
   },
 });
 

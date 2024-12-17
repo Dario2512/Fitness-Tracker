@@ -3,6 +3,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');  // Import cors
 const measurementController = require('./measurementController');
+const { getTodaysCalories, incrementCalories, getWeeklyCalories } = require('./caloriesController');
+
 
 const app = express();
 
@@ -12,11 +14,25 @@ app.use(cors());  // This will allow requests from all domains
 // Use bodyParser to parse JSON requests
 app.use(bodyParser.json());
 
+app.get('/', (req, res) => {
+  res.send('Welcome to the API!');
+});
+
 // Define POST route for saving measurements
 app.post('/api/measurements', measurementController.handleMeasurement);
 
 // Define GET route for fetching the last measurement
 app.get('/api/measurements/last', measurementController.getLastMeasurement);
+
+//Calories route
+// Route to get today's calories
+app.get('/todaysCalories', getTodaysCalories);
+
+// Route to increment calories (POST request)
+app.post('/incrementCalories', incrementCalories);
+
+// Route to get weekly calories
+app.get('/weeklyCalories', getWeeklyCalories);
 
 // Start the server
 const PORT = 3000;

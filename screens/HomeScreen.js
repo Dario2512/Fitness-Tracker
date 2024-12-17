@@ -1,8 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { Animated, Easing, TouchableOpacity, View, Text, Button } from 'react-native';
-import { auth } from './firebaseConfig';
-import styles from './styles';
+import { auth } from '../backend/firebase/firebaseConfig';
+import styles from './styles/styles';
 import { Image } from 'react-native';
 import heartIcon from './images/Heart.png'; 
 
@@ -21,7 +21,7 @@ const HomeScreen = () => {
     if (auth.currentUser) {
       const userId = auth.currentUser.uid;
       try {
-        const response = await fetch(`http://192.168.56.1:3000/api/measurements/last?userId=${userId}`);
+        const response = await fetch(`http://192.168.0.11:3000/api/measurements/last?userId=${userId}`);
         if (response.ok) {
           const data = await response.json();
           setLastMeasurement(data);
@@ -49,7 +49,7 @@ const HomeScreen = () => {
 
     // Send averaged measurement to the backend
     try {
-      const response = await fetch(`http://192.168.56.1:3000/api/measurements?userId=${auth.currentUser.uid}`, {
+      const response = await fetch(`http://192.168.0.11:3000/api/measurements?userId=${auth.currentUser.uid}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -154,8 +154,8 @@ const HomeScreen = () => {
 
       {/* Navigation Buttons */}
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Home')}>
-          <Text style={styles.navButtonText}>Home</Text>
+        <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Calories')}>
+          <Text style={styles.navButtonText}>Calories</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Stats')}>
           <Text style={styles.navButtonText}>Stats</Text>

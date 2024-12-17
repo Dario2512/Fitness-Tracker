@@ -1,8 +1,8 @@
 import { doc, getDoc, getFirestore, updateDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { Modal, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { auth } from './firebaseConfig';
-import styles from './stylesUser.js';
+import { auth } from '../backend/firebase/firebaseConfig.js';
+import styles from './styles/stylesUser.js';
 
 const UserScreen = ({ navigation }) => {
   const [userData, setUserData] = useState({

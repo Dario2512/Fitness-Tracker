@@ -1,11 +1,13 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
-import HomeScreen from './HomeScreen';
-import SignInScreen from './SignInScreen';
-import SignUpScreen from './SignUpScreen';
-import StatsScreen from './StatsScreen';
-import UserScreen from './UserScreen';
+import HomeScreen from './screens/HomeScreen';
+import SignInScreen from './screens/SignInScreen';
+import SignUpScreen from './screens/SignUpScreen';
+import StatsScreen from './screens/StatsScreen';
+import UserScreen from './screens/UserScreen';
+//import MapsScreen from './screens/MapsScreen'
+import CaloriesScreen from './screens/CaloriesScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -51,6 +53,15 @@ export default function App() {
             headerTintColor: 'white',
             headerTitle: '', 
           }} 
+        />
+        <Stack.Screen
+          name="Calories"
+          component={CaloriesScreen} // Add the CaloriesScreen
+          options={{
+            headerStyle: { backgroundColor: '#121212' },
+            headerTintColor: 'white',
+            headerTitle: 'Calories Tracker', // Update title
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>

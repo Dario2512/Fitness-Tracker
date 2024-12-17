@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import { collection, query, onSnapshot } from 'firebase/firestore';
-import { auth, db } from './firebaseConfig.js'; 
-import styles from './stylesStats';
+import { auth, db } from '../backend/firebase/firebaseConfig.js';
+import styles from './styles/stylesStats.js';
 
 const StatsScreen = () => {
   const [measurements, setMeasurements] = useState([]);

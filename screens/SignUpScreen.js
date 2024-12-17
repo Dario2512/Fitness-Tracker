@@ -2,8 +2,8 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import React, { useState } from 'react';
 import { Text, TextInput, View, TouchableOpacity } from 'react-native';
-import { auth, db } from './firebaseConfig';
-import stylesSign from './stylesSign'; // Import the styles
+import { auth, db } from '../backend/firebase/firebaseConfig';
+import stylesSign from './styles/stylesSign'; // Import the styles
 
 const SignUpScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
