@@ -27,6 +27,7 @@ const stylesUser = StyleSheet.create({
     borderColor: '#FF6347', // Tomato red border
     borderRadius: 5,
     padding: 10,
+    width: '50%',
     marginBottom: 15,
     color: '#FFF', // White text for input
     fontSize: 16,

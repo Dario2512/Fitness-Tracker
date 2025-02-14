@@ -1,9 +1,9 @@
 // server.js
 const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require('cors');  // Import cors
+const cors = require('cors');  
 const measurementController = require('./measurementController');
-const { getTodaysCalories, incrementCalories, getWeeklyCalories } = require('./caloriesController');
+const { getTodaysCalories, incrementCalories, incrementFoodCalories, getWeeklyCalories } = require('./caloriesController');
 
 
 const app = express();
@@ -30,6 +30,9 @@ app.get('/todaysCalories', getTodaysCalories);
 
 // Route to increment calories (POST request)
 app.post('/incrementCalories', incrementCalories);
+
+// Route to increment food calories (POST request)
+app.post('/incrementFoodCalories', incrementFoodCalories);
 
 // Route to get weekly calories
 app.get('/weeklyCalories', getWeeklyCalories);

@@ -103,6 +103,20 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
+    // Navigation Drawer Button Styling
+    drawerButton: {
+      position: 'absolute',
+      top: 15,
+      right: 10,
+      padding: 10,
+    },
+    drawerText: {
+      fontSize: 24,
+      color: '#FFF',
+      fontWeight: 'bold',
+    },  
 });
+
+
 
 export default styles;

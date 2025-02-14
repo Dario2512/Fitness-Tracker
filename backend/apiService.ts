@@ -1,8 +1,8 @@
 import axios from 'axios';
+import Constants from 'expo-constants';
+//require('dotenv').config();
 
-require('dotenv').config();
-
-const GOOGLE_MAPS_API_KEY = process.env.MAPS_API_KEY;
+const MAPS_API_KEY = Constants.expoConfig?.extra?.mapsApiKey; // Fetch API Key
 
 export const fetchNearbyPlaces = async (coords: {
   latitude: number;
@@ -16,7 +16,7 @@ export const fetchNearbyPlaces = async (coords: {
           location: `${coords.latitude},${coords.longitude}`,
           radius: 5000, // 5 km radius
           type: 'gym|stadium|hospital', // Filter types
-          key: GOOGLE_MAPS_API_KEY,
+          key: MAPS_API_KEY,
         },
       }
     );

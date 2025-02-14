@@ -21,7 +21,7 @@ const HomeScreen = () => {
     if (auth.currentUser) {
       const userId = auth.currentUser.uid;
       try {
-        const response = await fetch(`http://192.168.0.11:3000/api/measurements/last?userId=${userId}`);
+        const response = await fetch(`http://192.168.0.5:3000/api/measurements/last?userId=${userId}`);
         if (response.ok) {
           const data = await response.json();
           setLastMeasurement(data);
@@ -49,7 +49,7 @@ const HomeScreen = () => {
 
     // Send averaged measurement to the backend
     try {
-      const response = await fetch(`http://192.168.0.11:3000/api/measurements?userId=${auth.currentUser.uid}`, {
+      const response = await fetch(`http://192.168.0.5:3000/api/measurements?userId=${auth.currentUser.uid}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -112,6 +112,11 @@ const HomeScreen = () => {
         <Text style={styles.logoutText}>Logout</Text>
       </TouchableOpacity>
 
+      {/* Navigation Drawer Button */}
+        <TouchableOpacity style={styles.drawerButton} onPress={() => navigation.openDrawer()}>
+        <Text style={styles.drawerText}>☰</Text>  
+      </TouchableOpacity>
+
       {/* App Name */}
       <View style={styles.appNameContainer}>
         <Text style={styles.appName}>Fitness Tracker</Text>
@@ -160,8 +165,8 @@ const HomeScreen = () => {
         <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Stats')}>
           <Text style={styles.navButtonText}>Stats</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('User')}>
-          <Text style={styles.navButtonText}>User</Text>
+        <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Maps')}>
+          <Text style={styles.navButtonText}>Maps</Text>
         </TouchableOpacity>
       </View>
     </View>

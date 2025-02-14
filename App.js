@@ -6,7 +6,7 @@ import SignInScreen from './screens/SignInScreen';
 import SignUpScreen from './screens/SignUpScreen';
 import StatsScreen from './screens/StatsScreen';
 import UserScreen from './screens/UserScreen';
-//import MapsScreen from './screens/MapsScreen'
+import MapsScreen from './screens/MapsScreen';
 import CaloriesScreen from './screens/CaloriesScreen';
 
 const Stack = createNativeStackNavigator();
@@ -61,6 +61,15 @@ export default function App() {
             headerStyle: { backgroundColor: '#121212' },
             headerTintColor: 'white',
             headerTitle: 'Calories Tracker', // Update title
+          }}
+        />
+        <Stack.Screen
+          name="Maps"
+          component={MapsScreen} //Add MapsScreen
+          options={{
+            headerStyle: { backgroundColor: '#121212' },
+            headerTintColor: 'white',
+            headerTitle: 'Nearby Places',
           }}
         />
       </Stack.Navigator>

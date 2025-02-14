@@ -1,127 +1,226 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, FlatList } from 'react-native';
-import { collection, query, onSnapshot, doc, getDoc } from 'firebase/firestore';
-import { auth, db } from '../backend/firebase/firebaseConfig'; 
+import { View, Text, FlatList, TextInput, Button, Modal } from 'react-native';
+import { auth } from '../backend/firebase/firebaseConfig'; // Firebase auth
+import styles from './styles/stylesCalories'; // Import modal styles
 
-// Define types for calorie data
-type CalorieEntry = {
-  id: string;
+interface CalorieEntry {
+  date: string; // Ensure this is a string like 'YYYY-MM-DD' from the backend
   calories: number;
-  date: { seconds: number; nanoseconds: number }; // Firestore Timestamp
-};
+}
 
 const CaloriesScreen = () => {
-  const [todayCalories, setTodayCalories] = useState<number>(0);
+  const [todayCalories, setTodayCalories] = useState(0);
   const [weeklyCalories, setWeeklyCalories] = useState<CalorieEntry[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [showFoodModal, setShowFoodModal] = useState(false);
+  const [showWalkingModal, setShowWalkingModal] = useState(false);
 
+  // Input states for food modal
+  const [foodName, setFoodName] = useState('');
+  const [foodWeight, setFoodWeight] = useState('');
+  const [foodCalories, setFoodCalories] = useState('');
+
+  // Input state for walking modal
+  const [walkingSteps, setWalkingSteps] = useState('');
+
+  const userId = auth.currentUser?.uid;
+
+  // Fetch today's calories
+  const fetchTodaysCalories = async () => {
+    try {
+      const response = await fetch(`http://192.168.0.5:3000/todaysCalories?userId=${userId}`);
+      const data = await response.json();
+      setTodayCalories(data.calories || 0);
+    } catch (error) {
+      console.error('Error fetching today\'s calories:', error);
+    }
+  };
+
+  // Fetch weekly calories
+  const fetchWeeklyCalories = async () => {
+    try {
+      const response = await fetch(`http://192.168.0.5:3000/weeklyCalories?userId=${userId}`);
+      const data = await response.json();
+      setWeeklyCalories(data.weeklyCalories || []);
+    } catch (error) {
+      console.error('Error fetching weekly calories:', error);
+    }
+  };
+
+  // Add food calories
+  const addFoodCalories = async () => {
+    if (!foodCalories) {
+      console.log("No food calories provided");
+      return;
+    }
+  
+    if (!userId) {
+      console.log("User is not authenticated");
+      return;
+    }
+  
+    try {
+      const response = await fetch('http://192.168.0.5:3000/incrementFoodCalories', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: userId,
+          additionalCalories: Number(foodCalories),
+        }),
+      });
+  
+      const result = await response.json();
+  
+      if (response.ok) {
+        console.log('Food calories added:', result);
+        fetchTodaysCalories();
+        setShowFoodModal(false);
+        setFoodName('');
+        setFoodWeight('');
+        setFoodCalories('');
+      } else {
+        console.log('Failed to add food calories:', result);
+      }
+    } catch (error) {
+      console.error('Error adding food calories:', error);
+    }
+  };
+
+  // Add walking steps
+  const addWalkingSteps = async () => {
+    if (!walkingSteps || isNaN(Number(walkingSteps))) return;
+
+    try {
+      const response = await fetch('http://192.168.0.5:3000/incrementCalories', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: userId,
+          steps: Number(walkingSteps),
+        }),
+      });
+      const result = await response.json();
+
+      if (response.ok) {
+        console.log('Steps added:', result);
+        fetchTodaysCalories();
+        setShowWalkingModal(false);
+        setWalkingSteps('');
+      }
+    } catch (error) {
+      console.error('Error adding steps:', error);
+    }
+  };
+
+  // Fetch data on mount
   useEffect(() => {
-    const fetchCalories = async () => {
-      const userId = auth.currentUser?.uid;
+    if (userId) {
+      fetchTodaysCalories();
+      fetchWeeklyCalories();
+    }
+  }, [userId]);
 
-      if (!userId) {
-        console.error('User is not logged in');
-        setLoading(false);
-        return;
-      }
+  // Format date function
+  const formatDate = (date: any) => {
+    let dateObj: Date;
+  
+    if (typeof date === 'string') {
+      // If it's an ISO string
+      dateObj = new Date(date);
+    } else if (date && date.seconds !== undefined && date.nanoseconds !== undefined) {
+      // If it's a Firestore Timestamp
+      dateObj = new Date(date.seconds * 1000); // Timestamp is in seconds
+    } else {
+      // If it's already a valid Date object
+      dateObj = new Date(date);
+    }
+  
+    return dateObj.toLocaleDateString(); // e.g., "12/17/2024"
+  };
 
-      try {
-        // Get today's calories
-        const today = new Date();
-        const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-        const todayDocRef = doc(db, `calories/${userId}/dailyCalories`, startOfDay.toISOString()); // Correct path
-        const todayDocSnap = await getDoc(todayDocRef);
-
-        if (todayDocSnap.exists()) {
-          setTodayCalories(todayDocSnap.data().calories || 0);
-        } else {
-          setTodayCalories(0); // No data for today
-        }
-
-        // Get last 7 days' calories
-        const caloriesRef = collection(db, `calories/${userId}/dailyCalories`);
-        const q = query(caloriesRef);
-
-        onSnapshot(
-          q,
-          (snapshot) => {
-            const data = snapshot.docs.map((doc) => ({
-              id: doc.id,
-              ...doc.data(),
-            })) as CalorieEntry[];
-
-            const weekStart = new Date();
-            weekStart.setDate(weekStart.getDate() - 7); // Get the start of the week (7 days ago)
-
-            const filteredData = data.filter((entry) => {
-              const entryDate = new Date(entry.date.seconds * 1000);
-              return entryDate >= weekStart;
-            });
-
-            setWeeklyCalories(filteredData);
-            setLoading(false);
-          },
-          (error) => {
-            console.error('Error fetching weekly calories:', error);
-            setLoading(false);
-          }
-        );
-      } catch (error) {
-        console.error('Error fetching calorie data:', error);
-        setLoading(false);
-      }
-    };
-
-    fetchCalories(); // Call the async function
-  }, []);
-
-  if (loading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#FF6347" />
-        <Text style={styles.loadingText}>Loading calories data...</Text>
-      </View>
-    );
-  }
-
+  // Render each day's calories
   const renderWeeklyCalories = ({ item }: { item: CalorieEntry }) => (
     <View style={styles.card}>
       <Text style={styles.cardText}>
-        {new Date(item.date.seconds * 1000).toLocaleDateString()}: {item.calories} kcal
+        {formatDate(item.date)}: {item.calories} kcal
       </Text>
     </View>
   );
 
   return (
     <View style={styles.container}>
-      <View style={styles.todayBox}>
-        <Text style={styles.header}>Today's Calories</Text>
-        <Text style={styles.calories}>{todayCalories} kcal</Text>
-      </View>
-      <View style={styles.weekBox}>
-        <Text style={styles.header}>Calories Burned This Week</Text>
-        <FlatList
-          data={weeklyCalories}
-          keyExtractor={(item) => item.id}
-          renderItem={renderWeeklyCalories}
-          contentContainerStyle={styles.listContent}
+      <Text style={styles.header}>Today's Calories</Text>
+      <Text style={styles.todayBox}>{todayCalories} kcal</Text>
+
+      <View style={styles.buttonsContainer}>
+        <Button
+          title="Add Food Calories"
+          onPress={() => setShowFoodModal(true)}
+          color="#FF6347" // Tomato red color for button
+        />
+        <Button
+          title="Add Walking Steps"
+          onPress={() => setShowWalkingModal(true)}
+          color="#FF6347" // Tomato red color for button
         />
       </View>
+
+      <Text style={styles.header}>Weekly Calories</Text>
+      <FlatList
+        data={weeklyCalories}
+        renderItem={renderWeeklyCalories}
+        keyExtractor={(item, index) => index.toString()}
+      />
+
+      {/* Food Modal */}
+      <Modal visible={showFoodModal} animationType="fade">
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalHeader}>Add Food Calories</Text>
+            <TextInput
+              style={styles.modalInput}
+              placeholder="Food Name"
+              value={foodName}
+              onChangeText={setFoodName}
+            />
+            <TextInput
+              style={styles.modalInput}
+              placeholder="Weight (g)"
+              keyboardType="numeric"
+              value={foodWeight}
+              onChangeText={setFoodWeight}
+            />
+            <TextInput
+              style={styles.modalInput}
+              placeholder="Calories"
+              keyboardType="numeric"
+              value={foodCalories}
+              onChangeText={setFoodCalories}
+            />
+            <Button title="Save" onPress={addFoodCalories} color="tomato" />
+            <Button title="Cancel" onPress={() => setShowFoodModal(false)} color="tomato" />
+          </View>
+        </View>
+      </Modal>
+
+      {/* Walking Steps Modal */}
+      <Modal visible={showWalkingModal} animationType="fade">
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalHeader}>Add Walking Steps</Text>
+            <TextInput
+              style={styles.modalInput}
+              placeholder="Number of Steps"
+              keyboardType="numeric"
+              value={walkingSteps}
+              onChangeText={setWalkingSteps}
+            />
+            <Button title="Save" onPress={addWalkingSteps} color="tomato" />
+            <Button title="Cancel" onPress={() => setShowWalkingModal(false)} color="tomato" />
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20 },
-  todayBox: { padding: 20, backgroundColor: '#cde', marginBottom: 20 },
-  weekBox: { padding: 20, backgroundColor: '#eec' },
-  header: { fontSize: 18, fontWeight: 'bold' },
-  calories: { fontSize: 24, fontWeight: 'bold', color: 'green' },
-  card: { padding: 10, backgroundColor: '#fff', marginVertical: 5, borderRadius: 5 },
-  cardText: { fontSize: 16 },
-  loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  loadingText: { fontSize: 16, marginTop: 10 },
-  listContent: { paddingBottom: 20 },
-});
 
 export default CaloriesScreen;
