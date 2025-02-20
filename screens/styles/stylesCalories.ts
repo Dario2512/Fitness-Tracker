@@ -4,13 +4,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#2c2c2c', // Dark gray background
+    backgroundColor: '#2c2c2c',
   },
   header: {
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
-    color: '#fff', // White text for the header
+    color: '#fff',
   },
   todayBox: {
     fontSize: 24,
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   modalContent: {
-    backgroundColor: '#2c2c2c', // Dark background for the modal
+    backgroundColor: '#2c2c2c',
     padding: 20,
     borderRadius: 10,
     width: '80%',
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
     textAlign: 'center',
-    color: '#fff', // White text in modal header
+    color: '#fff',
   },
   modalInput: {
     height: 40,
@@ -70,12 +70,12 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingLeft: 8,
     borderRadius: 5,
-    backgroundColor: '#fff', // White background for input fields
+    backgroundColor: '#fff',
     width: '100%',
   },
   modalButton: {
     marginTop: 10,
-    backgroundColor: '#FF6347', // Tomato red color for modal button
+    backgroundColor: '#FF6347',
     padding: 10,
     borderRadius: 5,
     width: '100%',
@@ -86,8 +86,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   cancelButton: {
-    marginTop: 15, // Adding space between save and cancel button
-    backgroundColor: '#FF6347', // Tomato red color for cancel button as well
+    marginTop: 15,
+    backgroundColor: '#FF6347',
     padding: 10,
     borderRadius: 5,
     width: '100%',
@@ -97,21 +97,21 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
   },
-
-  // Custom styles for buttons
   buttonsContainer: {
     marginBottom: 20,
   },
   buttonStyle: {
     borderRadius: 20,
     height: 45,
-    backgroundColor: '#FF6347', // Tomato red background for main buttons
-    marginBottom: 15, // Space between buttons
+    backgroundColor: '#FF6347',
+    marginBottom: 15,
   },
-  // Button text styles
   buttonText: {
     color: 'white',
     fontWeight: 'bold',
+  },
+  foodEntry: {
+    marginBottom: 10,
   },
 });
 

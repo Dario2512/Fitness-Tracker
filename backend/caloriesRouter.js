@@ -3,14 +3,12 @@ const caloriesController = require('./caloriesController');
 const router = express.Router();
 
 // GET today's calories
-router.get('/today', caloriesController.getTodaysCalories);
+router.get('/todaysCalories', caloriesController.getTodaysCalories);
 
-// POST: Increment calories based on user activity
-router.post('/increment', caloriesController.incrementCalories);
-
-router.post('/incrementFood', caloriesController.incrementFoodCalories);
+// POST: Increment food calories
+router.post('/incrementFoodCalories', caloriesController.incrementFoodCalories);
 
 // GET: Get calories burned in the last 7 days
-router.get('/week', caloriesController.getWeeklyCalories);
+router.get('/weeklyCalories', caloriesController.getWeeklyCalories);
 
 module.exports = router;

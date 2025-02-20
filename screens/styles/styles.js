@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
   // Logout button styling
   logoutButton: {
     position: 'absolute',
-    top: 15,
+    top: 30,
     left: 10,
     padding: 10,
   },
@@ -114,6 +114,18 @@ const styles = StyleSheet.create({
       fontSize: 24,
       color: '#FFF',
       fontWeight: 'bold',
+    },
+    settingsButton: {
+      position: 'absolute',
+      top: 35,
+      right: 10,
+      padding: 5, // Adjust padding to make it smaller
+    },
+    
+    settingsIcon: {
+      width: 24,  // Smaller size for the gear icon
+      height: 24,
+      resizeMode: 'contain',
     },  
 });
 

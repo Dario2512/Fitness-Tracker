@@ -29,7 +29,7 @@ app.get('/api/measurements/last', measurementController.getLastMeasurement);
 app.get('/todaysCalories', getTodaysCalories);
 
 // Route to increment calories (POST request)
-app.post('/incrementCalories', incrementCalories);
+//app.post('/incrementCalories', incrementCalories);
 
 // Route to increment food calories (POST request)
 app.post('/incrementFoodCalories', incrementFoodCalories);

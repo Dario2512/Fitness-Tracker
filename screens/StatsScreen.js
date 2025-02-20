@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
-import { collection, query, onSnapshot } from 'firebase/firestore';
+import { collection, query, onSnapshot, orderBy } from 'firebase/firestore';
 import { auth, db } from '../backend/firebase/firebaseConfig.js';
 import styles from './styles/stylesStats.js';
 
@@ -17,9 +17,9 @@ const StatsScreen = () => {
         return;
       }
 
-      // Query the user's measurements
+      // Query the user's measurements, ordered by timestamp in descending order
       const measurementsRef = collection(db, `users/${userId}/measurements`);
-      const q = query(measurementsRef);
+      const q = query(measurementsRef, orderBy('timestamp', 'desc'));
 
       const unsubscribe = onSnapshot(
         q,

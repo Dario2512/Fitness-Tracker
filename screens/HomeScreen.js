@@ -1,10 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
+import { DrawerActions } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { Animated, Easing, TouchableOpacity, View, Text, Button } from 'react-native';
 import { auth } from '../backend/firebase/firebaseConfig';
 import styles from './styles/styles';
 import { Image } from 'react-native';
-import heartIcon from './images/Heart.png'; 
+import heartIcon from './images/Heart.png';
+import settingsIcon from './images/Gear.png';
 
 
 const HomeScreen = () => {
@@ -21,7 +23,7 @@ const HomeScreen = () => {
     if (auth.currentUser) {
       const userId = auth.currentUser.uid;
       try {
-        const response = await fetch(`http://192.168.0.5:3000/api/measurements/last?userId=${userId}`);
+        const response = await fetch(`https://ab2c-178-220-185-170.ngrok-free.app/api/measurements/last?userId=${userId}`);
         if (response.ok) {
           const data = await response.json();
           setLastMeasurement(data);
@@ -49,7 +51,7 @@ const HomeScreen = () => {
 
     // Send averaged measurement to the backend
     try {
-      const response = await fetch(`http://192.168.0.5:3000/api/measurements?userId=${auth.currentUser.uid}`, {
+      const response = await fetch(`https://ab2c-178-220-185-170.ngrok-free.app/api/measurements?userId=${auth.currentUser.uid}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -112,14 +114,14 @@ const HomeScreen = () => {
         <Text style={styles.logoutText}>Logout</Text>
       </TouchableOpacity>
 
-      {/* Navigation Drawer Button */}
-        <TouchableOpacity style={styles.drawerButton} onPress={() => navigation.openDrawer()}>
-        <Text style={styles.drawerText}>☰</Text>  
+      {/* Settings Button */}
+      <TouchableOpacity style={styles.settingsButton} onPress={() => navigation.navigate('Settings')}>
+        <Image source={settingsIcon} style={styles.settingsIcon} />
       </TouchableOpacity>
 
       {/* App Name */}
       <View style={styles.appNameContainer}>
-        <Text style={styles.appName}>Fitness Tracker</Text>
+        <Text style={styles.appName}>Life Tracker</Text>
       </View>
 
       {/* Last Measurement Display */}
@@ -127,13 +129,13 @@ const HomeScreen = () => {
         <View style={styles.lastMeasurement}>
           <Text style={styles.header}>Last Measurement:</Text>
           <Text style={styles.measurementText}>
-            Heart Rate: {lastMeasurement.heartRate?.toFixed(1)} bpm
+            Heart Rate: {lastMeasurement.heartRate ? lastMeasurement.heartRate.toFixed(1) : 'N/A'} bpm
           </Text>
           <Text style={styles.measurementText}>
-            SpO2: {lastMeasurement.spO2?.toFixed(1)} %
+            SpO2: {lastMeasurement.spO2 ? lastMeasurement.spO2.toFixed(1) : 'N/A'} %
           </Text>
           <Text style={styles.measurementText}>
-            Temperature: {lastMeasurement.temperature?.toFixed(1)} °C
+            Temperature: {lastMeasurement.temperature ? lastMeasurement.temperature.toFixed(1) : 'N/A'} °C
           </Text>
         </View>
       )}
