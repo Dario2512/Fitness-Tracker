@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { View, TextInput, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, TextInput, Text, StyleSheet, ActivityIndicator, FlatList, TouchableOpacity } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
-import { fetchNearbyPlaces } from '../backend/apiService';
+import { fetchNearbyPlaces, fetchAutocompleteSuggestions } from '../backend/apiService';
+import { FAB, Portal, Provider } from 'react-native-paper';
 import styles from './styles/stylesMaps';
 import axios from 'axios';
-//import { MAPS_API_KEY } from '@env';
 import Constants from 'expo-constants';
+
 const MAPS_API_KEY = Constants.expoConfig?.extra?.mapsApiKey; // Fetch API Key
 
 const MapsScreen: React.FC = () => {
@@ -15,7 +16,10 @@ const MapsScreen: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState<string>(''); // Search bar input
+  const [suggestions, setSuggestions] = useState<Array<any>>([]); // Autocomplete suggestions
   const [destination, setDestination] = useState<{ latitude: number; longitude: number } | null>(null);
+  const [filterType, setFilterType] = useState<string>('gym'); // Filter type
+  const [open, setOpen] = useState<boolean>(false); // FAB open state
 
   useEffect(() => {
     let locationSubscription: Location.LocationSubscription | null = null;
@@ -32,115 +36,118 @@ const MapsScreen: React.FC = () => {
         locationSubscription = await Location.watchPositionAsync(
           {
             accuracy: Location.Accuracy.High,
-            timeInterval: 5000, // Update every 5 seconds
-            distanceInterval: 10, // Update if moved 10 meters
+            timeInterval: 5000,
+            distanceInterval: 10,
           },
           async (newLocation) => {
             setLocation(newLocation);
-
-            // Fetch nearby gyms and hospitals
-            const nearbyPlaces = await fetchNearbyPlaces(newLocation.coords);
+            const nearbyPlaces = await fetchNearbyPlaces(newLocation.coords, filterType);
             setPlaces(nearbyPlaces);
+            setLoading(false);
           }
         );
       } catch (err) {
-        setError('Failed to load location data.');
-      } finally {
+        setError('Error fetching location.');
         setLoading(false);
       }
     })();
 
-    // Cleanup function to unsubscribe when unmounting
     return () => {
       if (locationSubscription) {
         locationSubscription.remove();
       }
     };
-  }, []);
+  }, [filterType]);
 
-  // Handle search input submission
-  const handleSearch = async () => {
-    if (!searchQuery) return;
-    console.log("Fetching location for:", searchQuery); // Debugging
-  
+  const handleSearch = async (query: string) => {
+    setSearchQuery(query);
+    if (query.length > 2 && location) {
+      const suggestions = await fetchAutocompleteSuggestions(query, location.coords);
+      setSuggestions(suggestions);
+    } else {
+      setSuggestions([]);
+    }
+  };
+
+  const handleSuggestionPress = async (placeId: string) => {
     try {
       const response = await axios.get(
-        `https://maps.googleapis.com/maps/api/geocode/json`,
+        `https://maps.googleapis.com/maps/api/place/details/json`,
         {
           params: {
-            address: searchQuery,
+            place_id: placeId,
             key: MAPS_API_KEY,
           },
         }
       );
-  
-      console.log("API Response:", response.data); // Debugging
-  
-      if (response.data.results.length > 0) {
-        const { lat, lng } = response.data.results[0].geometry.location;
-        setDestination({ latitude: lat, longitude: lng });
-      } else {
-        console.log("No results found.");
-      }
+
+      const { lat, lng } = response.data.result.geometry.location;
+      setDestination({ latitude: lat, longitude: lng });
+      setSearchQuery(response.data.result.name);
+      setSuggestions([]);
     } catch (error) {
-      console.error("Error fetching location:", error);
+      console.error('Error fetching place details:', error);
     }
   };
-  
+
+  const handleFilterChange = async (type: string) => {
+    setFilterType(type);
+    if (location) {
+      const nearbyPlaces = await fetchNearbyPlaces(location.coords, type);
+      setPlaces(nearbyPlaces);
+    }
+  };
 
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#e63946" />
-        <Text>Loading map and places...</Text>
-      </View>
-    );
-  }
-
-  if (error) {
-    return (
-      <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>{error}</Text>
+        <ActivityIndicator size="large" color="#FF6347" />
+        <Text style={styles.loadingText}>Loading...</Text>
       </View>
     );
   }
 
   return (
-    <View style={styles.container}>
-      {/* Search Bar */}
-      <TextInput
-        style={styles.searchBar}
-        placeholder="Enter destination..."
-        value={searchQuery}
-        onChangeText={setSearchQuery}
-        onSubmitEditing={() => {
-        console.log("Searching for:", searchQuery); // Debugging
-        handleSearch();
-        }}  
-      returnKeyType="search"
-      />
-
-      {location && (
+    <Provider>
+      <View style={styles.container}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search for places"
+          placeholderTextColor="white" // Set the placeholder text color to white
+          value={searchQuery}
+          onChangeText={handleSearch}
+        />
+        {suggestions.length > 0 && (
+          <FlatList
+            data={suggestions}
+            keyExtractor={(item) => item.place_id}
+            renderItem={({ item }) => (
+              <TouchableOpacity onPress={() => handleSuggestionPress(item.place_id)}>
+                <Text style={styles.suggestionItem}>{item.description}</Text>
+              </TouchableOpacity>
+            )}
+            style={styles.suggestionsList}
+          />
+        )}
         <MapView
           style={styles.map}
-          initialRegion={{
-            latitude: location.coords.latitude,
-            longitude: location.coords.longitude,
-            latitudeDelta: 0.05,
-            longitudeDelta: 0.05,
+          region={{
+            latitude: location?.coords.latitude || 37.78825,
+            longitude: location?.coords.longitude || -122.4324,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
           }}
         >
-          {/* Current Location Marker */}
-          <Marker
-            coordinate={{
-              latitude: location.coords.latitude,
-              longitude: location.coords.longitude,
-            }}
-            title="You are here"
-            pinColor="red"
-          />
-
-          {/* Nearby Gyms & Hospitals */}
+          {location && (
+            <Marker
+              coordinate={{
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
+              }}
+              title="My Location"
+              pinColor="yellow"
+            />
+          )}
           {places.map((place, index) => (
             <Marker
               key={index}
@@ -150,21 +157,41 @@ const MapsScreen: React.FC = () => {
               }}
               title={place.name}
               description={place.vicinity}
-              pinColor="blue"
+              pinColor="red"
             />
           ))}
-
-          {/* Destination Marker */}
           {destination && (
             <Marker
               coordinate={destination}
               title="Destination"
-              pinColor="green"
+              pinColor="#013220"
             />
           )}
         </MapView>
-      )}
-    </View>
+        <Portal>
+          <FAB.Group
+            open={open}
+            visible={true}
+            icon={open ? 'close' : 'filter'}
+            actions={[
+              { icon: 'dumbbell', label: 'Gyms', onPress: () => handleFilterChange('gym'), color: '#FF6347', labelStyle: { color: '#FF6347' }, style: { backgroundColor: '#121212' } },
+              { icon: 'stadium', label: 'Stadiums', onPress: () => handleFilterChange('stadium'), color: '#FF6347', labelStyle: { color: '#FF6347' }, style: { backgroundColor: '#121212' } },
+              { icon: 'hospital', label: 'Hospitals', onPress: () => handleFilterChange('hospital'), color: '#FF6347', labelStyle: { color: '#FF6347' }, style: { backgroundColor: '#121212' } },
+            ]}
+            onStateChange={({ open }) => setOpen(open)}
+            onPress={() => {
+              if (open) {
+                // Do something if the speed dial is open
+              }
+            }}
+            style={styles.fab} // Apply the custom style
+            fabStyle={{ backgroundColor: '#121212' }} // Set the main FAB button background color to gray
+            color="#FF6347" // Set the icon color to red
+            backdropColor="transparent" // Set the backdrop color to transparent
+          />
+        </Portal>
+      </View>
+    </Provider>
   );
 };
 

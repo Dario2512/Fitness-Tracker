@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
   // Logout button styling
   logoutButton: {
     position: 'absolute',
-    top: 30,
+    top: 40,
     left: 10,
     padding: 10,
   },
@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     padding: 15,
+    paddingBottom: 30,
     backgroundColor: '#1A1A1A', // Dark gray background for buttons
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
@@ -117,7 +118,7 @@ const styles = StyleSheet.create({
     },
     settingsButton: {
       position: 'absolute',
-      top: 35,
+      top: 45,
       right: 10,
       padding: 5, // Adjust padding to make it smaller
     },
