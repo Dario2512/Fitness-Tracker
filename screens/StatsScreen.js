@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { collection, query, onSnapshot, orderBy } from 'firebase/firestore';
 import { auth, db } from '../backend/firebase/firebaseConfig.js';
+import generatePDF from '../backend/pdfGenerator'; 
 import styles from './styles/stylesStats.js';
 
 const StatsScreen = () => {
@@ -40,6 +41,14 @@ const StatsScreen = () => {
     return unsubscribe;
   }, []);
 
+  const handleGeneratePDF = async (measurement) => {
+    try {
+      await generatePDF(measurement);
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+    }
+  };
+
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
@@ -57,6 +66,9 @@ const StatsScreen = () => {
       <Text style={styles.cardText}>
         Time: {new Date(item.timestamp.seconds * 1000).toLocaleString()}
       </Text>
+      <TouchableOpacity style={styles.button} onPress={() => handleGeneratePDF(item)}>
+        <Text style={styles.buttonText}>Create Report</Text>
+      </TouchableOpacity>
     </View>
   );
 

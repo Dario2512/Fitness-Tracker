@@ -1,17 +1,39 @@
 import { StyleSheet } from 'react-native';
 
-const stylesStats = StyleSheet.create({
+export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#121212', 
-    padding: 20,
+    backgroundColor: '#121212',
   },
   header: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#FFF',
+    fontSize: 24,
+    color: 'white',
     textAlign: 'center',
-    marginBottom: 20,
+    marginVertical: 20,
+  },
+  listContent: {
+    paddingHorizontal: 20,
+  },
+  card: {
+    backgroundColor: '#1e1e1e',
+    borderRadius: 10,
+    padding: 20,
+    marginVertical: 10,
+  },
+  cardText: {
+    color: 'white',
+    marginBottom: 10,
+  },
+  button: {
+    backgroundColor: 'tomato',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
   },
   loadingContainer: {
     flex: 1,
@@ -19,49 +41,8 @@ const stylesStats = StyleSheet.create({
     alignItems: 'center',
   },
   loadingText: {
-    fontSize: 18,
-    color: '#FFF',
     marginTop: 10,
-  },
-  card: {
-    backgroundColor: '#1A1A1A',
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 15,
-    elevation: 5,
-  },
-  cardText: {
     fontSize: 16,
-    color: '#FFF',
-    marginBottom: 3,
-  },
-  listContent: {
-    paddingBottom: 20,
-  },
-  caloriesBox: {
-    backgroundColor: '#1A1A1A',
-    borderRadius: 10,
-    padding: 20,
-    marginTop: 20,
-    alignItems: 'center',
-  },
-  caloriesHeader: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#FF6347',
-    marginBottom: 10,
-  },
-  caloriesValue: {
-    fontSize: 36,
-    fontWeight: 'bold',
-    color: '#FFF',
-  },
-  caloriesNote: {
-    fontSize: 14,
-    color: '#AAA',
-    marginTop: 10,
-    textAlign: 'center',
+    color: 'white',
   },
 });
-
-export default stylesStats;
