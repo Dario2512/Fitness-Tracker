@@ -8,7 +8,8 @@ import StatsScreen from './screens/StatsScreen';
 import UserScreen from './screens/UserScreen';
 import MapsScreen from './screens/MapsScreen';
 import CaloriesScreen from './screens/CaloriesScreen';
-import SettingsScreen from './screens/SettingsScreen'; 
+import SettingsScreen from './screens/SettingsScreen';
+import EmergencyNumberScreen from './screens/EmergencyNumberScreen'; 
 
 const Stack = createNativeStackNavigator();
 
@@ -80,6 +81,15 @@ export default function App() {
             headerStyle: { backgroundColor: '#121212' },
             headerTintColor: 'white',
             headerTitle: 'Settings',
+          }}
+        />
+        <Stack.Screen
+          name="EmergencyNumber"
+          component={EmergencyNumberScreen} // Add EmergencyNumberScreen
+          options={{
+            headerStyle: { backgroundColor: '#121212' },
+            headerTintColor: 'white',
+            headerTitle: 'Emergency Contact',
           }}
         />
       </Stack.Navigator>

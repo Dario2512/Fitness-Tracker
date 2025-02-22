@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-//import styles from './styles/stylesSettings';
+import styles from './styles/stylesSettings';
 
 interface SettingOption {
   id: string;
@@ -14,6 +14,7 @@ const SettingsScreen: React.FC = () => {
 
   const settingsOptions: SettingOption[] = [
     { id: '1', name: 'User Profile', screen: 'User' },
+    { id: '2', name: 'Emergency Contact', screen: 'EmergencyNumber' },
   ];
 
   return (
@@ -21,6 +22,7 @@ const SettingsScreen: React.FC = () => {
       <FlatList
         data={settingsOptions}
         keyExtractor={(item) => item.id}
+        numColumns={2}
         renderItem={({ item }) => (
           <TouchableOpacity
             style={styles.settingsItem}
@@ -33,27 +35,5 @@ const SettingsScreen: React.FC = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#121212',
-  },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  settingsItem: {
-    padding: 15,
-    backgroundColor: '#f0f0f0',
-    marginVertical: 5,
-    borderRadius: 5,
-  },
-  settingsText: {
-    fontSize: 18,
-  },
-});
 
 export default SettingsScreen;

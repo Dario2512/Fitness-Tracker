@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     color: '#fff', // White text for today's calories
   },
   card: {
-    backgroundColor: '#f9f9f9',
+    backgroundColor: '#424242',
     padding: 15,
     marginBottom: 10,
     borderRadius: 10,
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   },
   cardText: {
     fontSize: 16,
-    color: '#333', // Dark text for card items
+    color: '#ffffff', // Dark text for card items
   },
   input: {
     height: 40,

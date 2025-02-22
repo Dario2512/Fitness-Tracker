@@ -23,7 +23,7 @@ const HomeScreen = () => {
     if (auth.currentUser) {
       const userId = auth.currentUser.uid;
       try {
-        const response = await fetch(`https://d68a-178-220-185-170.ngrok-free.app/api/measurements/last?userId=${userId}`);
+        const response = await fetch(`https://c118-178-220-185-170.ngrok-free.app/api/measurements/last?userId=${userId}`);
         if (response.ok) {
           const data = await response.json();
           setLastMeasurement(data);
@@ -51,7 +51,7 @@ const HomeScreen = () => {
 
     // Send averaged measurement to the backend
     try {
-      const response = await fetch(`https://d68a-178-220-185-170.ngrok-free.app/api/measurements?userId=${auth.currentUser.uid}`, {
+      const response = await fetch(`https://c118-178-220-185-170.ngrok-free.app/api/measurements?userId=${auth.currentUser.uid}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
