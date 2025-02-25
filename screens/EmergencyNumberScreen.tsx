@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Alert, Modal, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { auth, db } from '../backend/firebase/firebaseConfig';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
+import { Alert, Modal, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { auth, db } from '../backend/firebase/firebaseConfig';
 import styles from './styles/stylesEmergencyNumber';
 
 const EmergencyNumberScreen: React.FC = () => {

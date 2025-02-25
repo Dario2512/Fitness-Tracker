@@ -1,6 +1,6 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import React from 'react';
+import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 import styles from './styles/stylesSettings';
 
 interface SettingOption {
@@ -15,6 +15,7 @@ const SettingsScreen: React.FC = () => {
   const settingsOptions: SettingOption[] = [
     { id: '1', name: 'User Profile', screen: 'User' },
     { id: '2', name: 'Emergency Contact', screen: 'EmergencyNumber' },
+    { id: '3', name: 'Change Password', screen: 'PasswordChange' },
   ];
 
   return (

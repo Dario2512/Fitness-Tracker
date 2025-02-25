@@ -1,12 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
-import { DrawerActions } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { Animated, Easing, TouchableOpacity, View, Text, Button } from 'react-native';
+import { Animated, Easing, Image, Text, TouchableOpacity, View } from 'react-native';
 import { auth } from '../backend/firebase/firebaseConfig';
-import styles from './styles/styles';
-import { Image } from 'react-native';
-import heartIcon from './images/Heart.png';
 import settingsIcon from './images/Gear.png';
+import heartIcon from './images/Heart.png';
+import styles from './styles/styles';
 
 
 const HomeScreen = () => {
@@ -23,7 +21,7 @@ const HomeScreen = () => {
     if (auth.currentUser) {
       const userId = auth.currentUser.uid;
       try {
-        const response = await fetch(`https://c118-178-220-185-170.ngrok-free.app/api/measurements/last?userId=${userId}`);
+        const response = await fetch(`https://f6a9-81-181-70-235.ngrok-free.app/api/measurements/last?userId=${userId}`);
         if (response.ok) {
           const data = await response.json();
           setLastMeasurement(data);
@@ -51,7 +49,7 @@ const HomeScreen = () => {
 
     // Send averaged measurement to the backend
     try {
-      const response = await fetch(`https://c118-178-220-185-170.ngrok-free.app/api/measurements?userId=${auth.currentUser.uid}`, {
+      const response = await fetch(`https://f6a9-81-181-70-235.ngrok-free.app/api/measurements?userId=${auth.currentUser.uid}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
