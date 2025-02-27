@@ -1,7 +1,8 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { doc, getDoc, getFirestore } from 'firebase/firestore';
 import React, { useState } from 'react';
-import { Button, Text, TextInput, View, TouchableOpacity } from 'react-native';
+import { Alert, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { auth } from '../backend/firebase/firebaseConfig';
 import stylesSign from './styles/stylesSign'; // Import the styles
 
@@ -12,34 +13,31 @@ const SignInScreen = ({ navigation }) => {
 
   const db = getFirestore();
 
-  const handleSignIn = () => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then(async (userCredential) => {
-        const userId = userCredential.user.uid;
+  const handleSignIn = async () => {
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userId = userCredential.user.uid;
 
-        try {
-          const userRef = doc(db, 'users', userId);
-          const userSnap = await getDoc(userRef);
+      const userRef = doc(db, 'users', userId);
+      const userSnap = await getDoc(userRef);
 
-          if (userSnap.exists()) {
-            const userData = userSnap.data();
-            if (userData.username && userData.age && userData.height && userData.weight) {
-              navigation.navigate('Home', { email: userCredential.user.email });
-              console.log('successfull sign in.');
-            } else {
-              navigation.navigate('User');
-            }
-          } else {
-            navigation.navigate('User');
-          }
-        } catch (error) {
-          console.error('Error checking user data:', error);
-          setError('Failed to check user profile. Please try again.');
+      if (userSnap.exists()) {
+        const userData = userSnap.data();
+        if (userData.username && userData.age && userData.height && userData.weight) {
+          await AsyncStorage.setItem('lastActive', Date.now().toString());
+          navigation.navigate('Home', { email: userCredential.user.email });
+          console.log('Successful sign in.');
+        } else {
+          navigation.navigate('User');
         }
-      })
-      .catch((error) => {
-        setError(error.message);
-      });
+      } else {
+        navigation.navigate('User');
+      }
+    } catch (error) {
+      console.error('Error during sign in:', error);
+      setError(error.message);
+      Alert.alert('Error', error.message);
+    }
   };
 
   return (

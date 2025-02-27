@@ -21,7 +21,7 @@ const HomeScreen = () => {
     if (auth.currentUser) {
       const userId = auth.currentUser.uid;
       try {
-        const response = await fetch(`https://f6a9-81-181-70-235.ngrok-free.app/api/measurements/last?userId=${userId}`);
+        const response = await fetch(`https://fd0a-46-97-171-30.ngrok-free.app/api/measurements/last?userId=${userId}`);
         if (response.ok) {
           const data = await response.json();
           setLastMeasurement(data);
@@ -49,7 +49,7 @@ const HomeScreen = () => {
 
     // Send averaged measurement to the backend
     try {
-      const response = await fetch(`https://f6a9-81-181-70-235.ngrok-free.app/api/measurements?userId=${auth.currentUser.uid}`, {
+      const response = await fetch(`https://fd0a-46-97-171-30.ngrok-free.app/api/measurements?userId=${auth.currentUser.uid}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -101,6 +101,7 @@ const HomeScreen = () => {
       navigation.replace('SignInScreen');
     } catch (error) {
       console.error('Error signing out:', error);
+      Alert.alert('Error', 'Failed to log out. Please try again.');
     }
   };
 
