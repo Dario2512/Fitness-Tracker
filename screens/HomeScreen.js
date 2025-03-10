@@ -1,27 +1,30 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { Animated, Easing, Image, Text, TouchableOpacity, View } from 'react-native';
-import { auth } from '../backend/firebase/firebaseConfig';
+import { Animated, Easing, Image, Text, TouchableOpacity, View, Alert } from 'react-native';
+import { auth, db } from '../backend/firebase/firebaseConfig';
+import { doc, getDoc } from 'firebase/firestore';
 import settingsIcon from './images/Gear.png';
 import heartIcon from './images/Heart.png';
+import bluetoothIcon from './images/Bluetooth.png'; // Add the Bluetooth icon
 import styles from './styles/styles';
-
 
 const HomeScreen = () => {
   const navigation = useNavigation();
   const [lastMeasurement, setLastMeasurement] = useState(null);
   const [isMeasuring, setIsMeasuring] = useState(false);
   const [heartAnimation] = useState(new Animated.Value(1)); // Initial scale of heart
+  const [username, setUsername] = useState('');
 
   useEffect(() => {
     fetchLastMeasurement();
+    fetchUserData();
   }, []);
 
   const fetchLastMeasurement = async () => {
     if (auth.currentUser) {
       const userId = auth.currentUser.uid;
       try {
-        const response = await fetch(`https://fd0a-46-97-171-30.ngrok-free.app/api/measurements/last?userId=${userId}`);
+        const response = await fetch(`https://68d1-178-220-185-8.ngrok-free.app/api/measurements/last?userId=${userId}`);
         if (response.ok) {
           const data = await response.json();
           setLastMeasurement(data);
@@ -30,6 +33,24 @@ const HomeScreen = () => {
         }
       } catch (error) {
         console.error('Error fetching last measurement:', error);
+      }
+    }
+  };
+
+  const fetchUserData = async () => {
+    if (auth.currentUser) {
+      const userId = auth.currentUser.uid;
+      try {
+        const userRef = doc(db, 'users', userId);
+        const userSnap = await getDoc(userRef);
+        if (userSnap.exists()) {
+          const userData = userSnap.data();
+          setUsername(userData.username || 'User');
+        } else {
+          console.error('No such document!');
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
       }
     }
   };
@@ -49,7 +70,7 @@ const HomeScreen = () => {
 
     // Send averaged measurement to the backend
     try {
-      const response = await fetch(`https://fd0a-46-97-171-30.ngrok-free.app/api/measurements?userId=${auth.currentUser.uid}`, {
+      const response = await fetch(`https://68d1-178-220-185-8.ngrok-free.app/api/measurements?userId=${auth.currentUser.uid}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -105,7 +126,6 @@ const HomeScreen = () => {
     }
   };
 
-
   return (
     <View style={styles.container}>
       {/* Logout Button */}
@@ -118,9 +138,9 @@ const HomeScreen = () => {
         <Image source={settingsIcon} style={styles.settingsIcon} />
       </TouchableOpacity>
 
-      {/* App Name */}
+      {/* Username Display */}
       <View style={styles.appNameContainer}>
-        <Text style={styles.appName}>Life Tracker</Text>
+        <Text style={styles.appName}>Hi, {username} 👋</Text>
       </View>
 
       {/* Last Measurement Display */}
@@ -139,14 +159,17 @@ const HomeScreen = () => {
         </View>
       )}
 
-      {/* Measure Button */}
-      <View style={styles.measureButtonContainer}>
+      {/* Heart Icon */}
+      <View style={styles.heartContainer}>
         <Animated.View
-          style={[styles.heartContainer, { transform: [{ scale: heartAnimation }] }]}
+          style={{ transform: [{ scale: heartAnimation }] }}
         >
           <Image source={heartIcon} style={styles.heartIcon} />
         </Animated.View>
+      </View>
 
+      {/* Measure and Bluetooth Buttons */}
+      <View style={styles.measureButtonContainer}>
         <TouchableOpacity
           style={[styles.measureButton, isMeasuring && styles.measureButtonDisabled]}
           onPress={handleMeasure}
@@ -155,6 +178,13 @@ const HomeScreen = () => {
           <Text style={styles.measureButtonText}>
             {isMeasuring ? 'Measuring...' : 'Measure'}
           </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.bluetoothButton}
+          onPress={() => console.log('Bluetooth button pressed')}
+        >
+          <Image source={bluetoothIcon} style={styles.bluetoothIcon} />
         </TouchableOpacity>
       </View>
 

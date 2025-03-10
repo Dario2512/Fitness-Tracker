@@ -41,37 +41,50 @@ const styles = StyleSheet.create({
     backgroundColor: '#1A1A1A', // Dark gray background for last measurement
     padding: 20,
     borderRadius: 10,
-    marginBottom: 20,
+    marginBottom: 50,
     elevation: 5, // Shadow for better visibility
   },
   measurementText: {
-    fontSize: 18,
-    color: '#FFF', // White text for measurements
-    marginVertical: 5,
+    fontSize: 20, // Increase the font size
+    color: '#FFF', // White text color
+    marginBottom: 10, // Add some space between measurements
   },
   measureButtonContainer: {
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     marginVertical: 20,
-    padding: 50
   },
   measureButton: {
-    backgroundColor: '#FF6347', // Tomato red for the measure button
-    paddingVertical: 15,
-    paddingHorizontal: 20,
+    backgroundColor: '#ff6347',
+    padding: 15,
     borderRadius: 10,
-    alignItems: 'center',
-    marginVertical: 20,
+    marginHorizontal: 10,
   },
   measureButtonDisabled: {
-    backgroundColor: '#D3D3D3', // Light gray when disabled
+    backgroundColor: '#ff6347',
+    opacity: 0.5,
   },
   measureButtonText: {
+    color: '#fff',
     fontSize: 18,
-    color: '#FFF', // White text
     fontWeight: 'bold',
   },
+  bluetoothButton: {
+    backgroundColor: '#007AFF',
+    padding: 15,
+    borderRadius: 10,
+    marginHorizontal: 10,
+  },
+  bluetoothIcon: {
+    width: 24,
+    height: 24,
+    tintColor: '#fff',
+  },
   heartContainer: {
+    alignItems: 'center',
     marginBottom: 50,
+    marginTop: 10,
   },
   heartIcon: {
     width: 150,  // Adjust the size as needed
@@ -104,32 +117,29 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
-    // Navigation Drawer Button Styling
-    drawerButton: {
-      position: 'absolute',
-      top: 15,
-      right: 10,
-      padding: 10,
-    },
-    drawerText: {
-      fontSize: 24,
-      color: '#FFF',
-      fontWeight: 'bold',
-    },
-    settingsButton: {
-      position: 'absolute',
-      top: 45,
-      right: 10,
-      padding: 5, // Adjust padding to make it smaller
-    },
-    
-    settingsIcon: {
-      width: 24,  // Smaller size for the gear icon
-      height: 24,
-      resizeMode: 'contain',
-    },  
+  // Navigation Drawer Button Styling
+  drawerButton: {
+    position: 'absolute',
+    top: 15,
+    right: 10,
+    padding: 10,
+  },
+  drawerText: {
+    fontSize: 24,
+    color: '#FFF',
+    fontWeight: 'bold',
+  },
+  settingsButton: {
+    position: 'absolute',
+    top: 45,
+    right: 10,
+    padding: 5, // Adjust padding to make it smaller
+  },
+  settingsIcon: {
+    width: 24,  // Smaller size for the gear icon
+    height: 24,
+    resizeMode: 'contain',
+  },
 });
-
-
 
 export default styles;
