@@ -1,11 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
-import { Animated, Easing, Image, Text, TouchableOpacity, View, Alert } from 'react-native';
-import { auth, db } from '../backend/firebase/firebaseConfig';
 import { doc, getDoc } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
+import { Alert, Animated, Easing, Image, Linking, Modal, Text, TouchableOpacity, View } from 'react-native';
+import { auth, db } from '../backend/firebase/firebaseConfig';
+import bluetoothIcon from './images/Bluetooth.png'; // Add the Bluetooth icon
 import settingsIcon from './images/Gear.png';
 import heartIcon from './images/Heart.png';
-import bluetoothIcon from './images/Bluetooth.png'; // Add the Bluetooth icon
 import styles from './styles/styles';
 
 const HomeScreen = () => {
@@ -14,17 +14,21 @@ const HomeScreen = () => {
   const [isMeasuring, setIsMeasuring] = useState(false);
   const [heartAnimation] = useState(new Animated.Value(1)); // Initial scale of heart
   const [username, setUsername] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
+  const [emergencyNumber, setEmergencyNumber] = useState('');
+  const [emergencyName, setEmergencyName] = useState('');
 
   useEffect(() => {
     fetchLastMeasurement();
     fetchUserData();
+    fetchEmergencyNumber();
   }, []);
 
   const fetchLastMeasurement = async () => {
     if (auth.currentUser) {
       const userId = auth.currentUser.uid;
       try {
-        const response = await fetch(`https://68d1-178-220-185-8.ngrok-free.app/api/measurements/last?userId=${userId}`);
+        const response = await fetch(`https://2c53-81-181-70-235.ngrok-free.app/api/measurements/last?userId=${userId}`);
         if (response.ok) {
           const data = await response.json();
           setLastMeasurement(data);
@@ -55,27 +59,63 @@ const HomeScreen = () => {
     }
   };
 
+  const fetchEmergencyNumber = async () => {
+    if (auth.currentUser) {
+      const userId = auth.currentUser.uid;
+      try {
+        const emergencyDocRef = doc(db, 'users', userId, 'emergency', 'emergencyNumber');
+        const emergencyDoc = await getDoc(emergencyDocRef);
+        if (emergencyDoc.exists()) {
+          const data = emergencyDoc.data();
+          setEmergencyName(data?.name || '');
+          setEmergencyNumber(data?.number || '');
+        }
+      } catch (error) {
+        console.error('Error fetching emergency number:', error);
+        Alert.alert('Error', 'Failed to fetch emergency number');
+      }
+    }
+  };
+
   const handleMeasure = async () => {
     setIsMeasuring(true);
     animateHeart(true); // Start heart animation
 
     // Simulate taking 5 measurements
-    let total = 0;
+    let totalHeartRate = 0;
+    let totalSpO2 = 0;
+    let totalTemperature = 0;
     for (let i = 0; i < 5; i++) {
-      const mockMeasurement = Math.random() * 10 + 70; // Replace with real sensor data
-      total += mockMeasurement;
+      const mockHeartRate = Math.random() * 10 + 70; // Replace with real sensor data
+      const mockSpO2 = Math.random() * 5 + 95; // Replace with real sensor data
+      const mockTemperature = Math.random() * 2 + 36; // Replace with real sensor data
+      totalHeartRate += mockHeartRate;
+      totalSpO2 += mockSpO2;
+      totalTemperature += mockTemperature;
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 1 second
     }
-    const average = total / 5;
+    const averageHeartRate = totalHeartRate / 5;
+    const averageSpO2 = totalSpO2 / 5;
+    const averageTemperature = totalTemperature / 5;
+
+    // Check if any of the measurements are abnormal
+    if (averageHeartRate < 50 || averageHeartRate > 150 || averageSpO2 < 100 || averageTemperature < 35 || averageTemperature >= 37.5) {
+      setModalVisible(true);
+      setTimeout(() => {
+        if (modalVisible) {
+          redirectToPhoneApp();
+        }
+      }, 60000); // 60 seconds timer
+    }
 
     // Send averaged measurement to the backend
     try {
-      const response = await fetch(`https://68d1-178-220-185-8.ngrok-free.app/api/measurements?userId=${auth.currentUser.uid}`, {
+      const response = await fetch(`https://2c53-81-181-70-235.ngrok-free.app/api/measurements?userId=${auth.currentUser.uid}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ heartRate: average }),
+        body: JSON.stringify({ heartRate: averageHeartRate, spO2: averageSpO2, temperature: averageTemperature }),
       });
 
       if (response.ok) {
@@ -90,6 +130,11 @@ const HomeScreen = () => {
       setIsMeasuring(false);
       animateHeart(false); // Stop heart animation
     }
+  };
+
+  const redirectToPhoneApp = () => {
+    const phoneNumber = `tel:${emergencyNumber}`;
+    Linking.openURL(phoneNumber).catch((err) => console.error('Error opening phone app:', err));
   };
 
   const animateHeart = (shouldAnimate) => {
@@ -200,6 +245,26 @@ const HomeScreen = () => {
           <Text style={styles.navButtonText}>Maps</Text>
         </TouchableOpacity>
       </View>
+
+      {/* Emergency Modal */}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalLabel}>Are you feeling well?</Text>
+            <TouchableOpacity style={styles.modalButton} onPress={() => setModalVisible(false)}>
+              <Text style={styles.buttonText}>Yes</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.modalButton} onPress={redirectToPhoneApp}>
+              <Text style={styles.buttonText}>No</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };

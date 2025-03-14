@@ -31,7 +31,7 @@ const CaloriesScreen = () => {
   // Fetch today's calories
   const fetchTodaysCalories = async () => {
     try {
-      const response = await fetch(`https://68d1-178-220-185-8.ngrok-free.app/todaysCalories?userId=${userId}`);
+      const response = await fetch(`https://2c53-81-181-70-235.ngrok-free.app/todaysCalories?userId=${userId}`);
       const data = await response.json();
       setTodayCalories(data.calories || 0);
     } catch (error) {
@@ -42,7 +42,7 @@ const CaloriesScreen = () => {
   // Fetch weekly calories
   const fetchWeeklyCalories = async () => {
     try {
-      const response = await fetch(`https://68d1-178-220-185-8.ngrok-free.app/weeklyCalories?userId=${userId}`);
+      const response = await fetch(`https://2c53-81-181-70-235.ngrok-free.app/weeklyCalories?userId=${userId}`);
       const data = await response.json();
       const groupedData = groupCaloriesByDate(data.weeklyCalories || []);
       setWeeklyCalories(groupedData);
@@ -96,7 +96,7 @@ const CaloriesScreen = () => {
     }
   
     try {
-      const response = await fetch('https://68d1-178-220-185-8.ngrok-free.app/incrementFoodCalories', {
+      const response = await fetch('https://2c53-81-181-70-235.ngrok-free.app/incrementFoodCalories', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

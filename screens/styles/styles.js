@@ -140,6 +140,39 @@ const styles = StyleSheet.create({
     height: 24,
     resizeMode: 'contain',
   },
+  // Modal styles
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+  },
+  modalContent: {
+    width: '80%',
+    backgroundColor: '#1A1A1A', // Dark gray background for modal
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  modalLabel: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#FFF', // White text for modal label
+    marginBottom: 20,
+  },
+  modalButton: {
+    backgroundColor: '#FF6347', // Tomato red for modal buttons
+    padding: 10,
+    borderRadius: 10,
+    marginVertical: 10,
+    width: '80%',
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#FFF', // White text for buttons
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
 });
 
 export default styles;
