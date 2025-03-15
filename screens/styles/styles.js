@@ -39,10 +39,26 @@ const styles = StyleSheet.create({
   },
   lastMeasurement: {
     backgroundColor: '#1A1A1A', // Dark gray background for last measurement
-    padding: 20,
+    padding: 10,
     borderRadius: 10,
     marginBottom: 50,
     elevation: 5, // Shadow for better visibility
+  },
+  lastMeasurementHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  historyButton: {
+    backgroundColor: '#1A1A1A',
+    padding: 10,
+    paddingTop: 0,
+    borderRadius: 5,
+  },
+  historyButtonText: {
+    color: '#FF4D4D', // Red text for history button
+    fontWeight: 'bold',
+    fontSize: 16,
   },
   measurementText: {
     fontSize: 20, // Increase the font size

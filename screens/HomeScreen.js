@@ -28,7 +28,7 @@ const HomeScreen = () => {
     if (auth.currentUser) {
       const userId = auth.currentUser.uid;
       try {
-        const response = await fetch(`https://2c53-81-181-70-235.ngrok-free.app/api/measurements/last?userId=${userId}`);
+        const response = await fetch(`https://7b79-178-220-185-8.ngrok-free.app/api/measurements/last?userId=${userId}`);
         if (response.ok) {
           const data = await response.json();
           setLastMeasurement(data);
@@ -110,7 +110,7 @@ const HomeScreen = () => {
 
     // Send averaged measurement to the backend
     try {
-      const response = await fetch(`https://2c53-81-181-70-235.ngrok-free.app/api/measurements?userId=${auth.currentUser.uid}`, {
+      const response = await fetch(`https://7b79-178-220-185-8.ngrok-free.app/api/measurements?userId=${auth.currentUser.uid}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -191,7 +191,12 @@ const HomeScreen = () => {
       {/* Last Measurement Display */}
       {lastMeasurement && (
         <View style={styles.lastMeasurement}>
-          <Text style={styles.header}>Last Measurement:</Text>
+          <View style={styles.lastMeasurementHeader}>
+            <Text style={styles.header}>Last Measurement:</Text>
+            <TouchableOpacity style={styles.historyButton} onPress={() => navigation.navigate('Stats')}>
+              <Text style={styles.historyButtonText}>History</Text>
+            </TouchableOpacity>
+          </View>
           <Text style={styles.measurementText}>
             Heart Rate: {lastMeasurement.heartRate ? lastMeasurement.heartRate.toFixed(1) : 'N/A'} bpm
           </Text>
@@ -238,8 +243,8 @@ const HomeScreen = () => {
         <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Calories')}>
           <Text style={styles.navButtonText}>Calories</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Stats')}>
-          <Text style={styles.navButtonText}>Stats</Text>
+        <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('StepCounter')}>
+          <Text style={styles.navButtonText}>Steps</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Maps')}>
           <Text style={styles.navButtonText}>Maps</Text>

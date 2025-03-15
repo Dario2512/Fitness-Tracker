@@ -14,6 +14,7 @@ import SettingsScreen from './screens/SettingsScreen';
 import SignInScreen from './screens/SignInScreen';
 import SignUpScreen from './screens/SignUpScreen';
 import StatsScreen from './screens/StatsScreen';
+import StepCounterScreen from './screens/StepCounterScreen';
 import UserScreen from './screens/UserScreen';
 
 const Stack = createNativeStackNavigator();
@@ -25,6 +26,7 @@ export default function App() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
+        console.log('User is authenticated:', user.uid);
         const lastActive = await AsyncStorage.getItem('lastActive');
         const currentTime = Date.now();
         const expirationTime = 24 * 60 * 60 * 1000; // 24 hours
@@ -37,6 +39,7 @@ export default function App() {
           await AsyncStorage.setItem('lastActive', currentTime.toString());
         }
       } else {
+        console.log('User is not authenticated');
         setUser(null);
       }
 
@@ -144,6 +147,15 @@ export default function App() {
             headerStyle: { backgroundColor: '#121212' },
             headerTintColor: 'white',
             headerTitle: 'Change Password',
+          }}
+        />
+        <Stack.Screen
+          name="StepCounter"
+          component={StepCounterScreen}
+          options={{
+            headerStyle: { backgroundColor: '#121212' },
+            headerTintColor: 'white',
+            headerTitle: 'Steps History',
           }}
         />
       </Stack.Navigator>

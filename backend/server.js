@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');  
 const measurementController = require('./measurementController');
 const { getTodaysCalories, incrementCalories, incrementFoodCalories, getWeeklyCalories } = require('./caloriesController');
-
+const stepsRouter = require('./stepsController');
 
 const app = express();
 
@@ -36,6 +36,9 @@ app.post('/incrementFoodCalories', incrementFoodCalories);
 
 // Route to get weekly calories
 app.get('/weeklyCalories', getWeeklyCalories);
+
+// Define steps routes
+app.use('/api/steps', stepsRouter);
 
 // Start the server
 const PORT = 3000;

@@ -20,7 +20,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.anonymous.Licenta"
+      "package": "com.anonymous.Licenta",
+      "permissions": [ "ACTIVITY_RECOGNITION", "INTERNET"]
     },
     "web": {
       "bundler": "metro",
