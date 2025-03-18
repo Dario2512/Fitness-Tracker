@@ -1,11 +1,13 @@
 import { Pedometer } from 'expo-sensors';
 import React, { useEffect, useState } from 'react';
-import { Alert, FlatList, PermissionsAndroid, Platform, StyleSheet, Text, View } from 'react-native';
+import { Alert, FlatList, PermissionsAndroid, Platform, Text, View } from 'react-native';
 import { auth } from '../backend/firebase/firebaseConfig';
+import { formatDate } from '../utils/formatDate'; // Import the utility function
+import styles from './styles/stylesSteps'; // Import the styles
 
 const StepCounterScreen: React.FC = () => {
   const [currentSteps, setCurrentSteps] = useState(0);
-  const [weeklySteps, setWeeklySteps] = useState<{ date: string, steps: number }[]>([]);
+  const [weeklySteps, setWeeklySteps] = useState<{ id: string, date: string, steps: number }[]>([]);
 
   useEffect(() => {
     const requestPermissions = async () => {
@@ -73,11 +75,11 @@ const StepCounterScreen: React.FC = () => {
       const userId = auth.currentUser.uid;
       try {
         console.log('Fetching weekly steps for userId:', userId);
-        const response = await fetch(`https://7b79-178-220-185-8.ngrok-free.app/api/steps/weekly?userId=${userId}`);
+        const response = await fetch(`https://a2da-178-220-185-8.ngrok-free.app/api/steps/weekly?userId=${userId}`);
         if (response.ok) {
           const data = await response.json();
-          const sortedData = sortWeeklySteps(data);
-          setWeeklySteps(sortedData);
+          //console.log('Fetched weekly steps:', data); // Add this line to debug
+          setWeeklySteps(data);
         } else {
           console.error('Failed to fetch weekly steps');
           Alert.alert('Error', 'Failed to fetch weekly steps');
@@ -89,33 +91,25 @@ const StepCounterScreen: React.FC = () => {
     }
   };
 
-  const sortWeeklySteps = (steps: number[]) => {
-    const today = new Date();
-    const sortedSteps = steps.map((step, index) => {
-      const date = new Date();
-      date.setDate(today.getDate() - (6 - index));
-      return { date: date.toDateString(), steps: step };
-    }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-    return sortedSteps;
-  };
-
   const updateSteps = async (steps: number) => {
     if (auth.currentUser) {
       const userId = auth.currentUser.uid;
+      const date = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
       try {
-        console.log('Updating steps for userId:', userId, 'with steps:', steps);
-        const response = await fetch(`https://7b79-178-220-185-8.ngrok-free.app/api/steps/update`, {
+        console.log('Updating steps for userId:', userId, 'with steps:', steps, 'on date:', date);
+        const response = await fetch(`https://a2da-178-220-185-8.ngrok-free.app/api/steps/update`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ userId, steps }),
+          body: JSON.stringify({ userId, steps, date }),
         });
         if (!response.ok) {
           console.error('Failed to update steps');
           Alert.alert('Error', 'Failed to update steps');
         } else {
           console.log('Steps updated successfully');
+          fetchWeeklySteps(); // Fetch the updated steps after updating
         }
       } catch (error) {
         console.error('Error updating steps:', error);
@@ -130,45 +124,15 @@ const StepCounterScreen: React.FC = () => {
       <Text style={styles.subHeader}>Last 7 Days</Text>
       <FlatList
         data={weeklySteps}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.stepItem}>
-            <Text style={styles.stepText}>{item.date}: {item.steps} steps</Text>
+            <Text style={styles.stepText}>{formatDate(item.date)}: {item.steps} steps</Text>
           </View>
         )}
       />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#121212',
-  },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#FFF',
-    marginBottom: 20,
-  },
-  subHeader: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#FFF',
-    marginBottom: 10,
-  },
-  stepItem: {
-    padding: 20,
-    backgroundColor: '#1A1A1A',
-    borderRadius: 10,
-    marginBottom: 10,
-  },
-  stepText: {
-    fontSize: 18,
-    color: '#FFF',
-  },
-});
 
 export default StepCounterScreen;

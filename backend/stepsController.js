@@ -15,10 +15,10 @@ router.get('/weekly', async (req, res) => {
 });
 
 router.post('/update', async (req, res) => {
-  const { userId, steps } = req.body;
-  console.log(`Received request to update steps for userId: ${userId}, steps: ${steps}`);
+  const { userId, steps, date } = req.body;
+  console.log(`Received request to update steps for userId: ${userId}, steps: ${steps}, date: ${date}`);
   try {
-    await updateSteps(userId, steps);
+    await updateSteps(userId, steps, date);
     res.status(200).send('Steps updated successfully');
   } catch (error) {
     console.error('Error updating steps:', error);

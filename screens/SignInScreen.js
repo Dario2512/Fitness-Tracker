@@ -21,9 +21,9 @@ const SignInScreen = ({ navigation }) => {
 
       if (userSnap.exists()) {
         const userData = userSnap.data();
-        if (userData.username && userData.age && userData.height && userData.weight) {
+        if (userData.name && userData.surname && userData.age && userData.height && userData.weight) {
           await AsyncStorage.setItem('lastActive', Date.now().toString());
-          navigation.navigate('Home', { email: userCredential.user.email });
+          navigation.navigate('Home', { name: userData.name });
           console.log('Successful sign in.');
         } else {
           navigation.navigate('User');

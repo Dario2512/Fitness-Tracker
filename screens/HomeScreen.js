@@ -13,7 +13,7 @@ const HomeScreen = () => {
   const [lastMeasurement, setLastMeasurement] = useState(null);
   const [isMeasuring, setIsMeasuring] = useState(false);
   const [heartAnimation] = useState(new Animated.Value(1)); // Initial scale of heart
-  const [username, setUsername] = useState('');
+  const [name, setname] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [emergencyNumber, setEmergencyNumber] = useState('');
   const [emergencyName, setEmergencyName] = useState('');
@@ -28,7 +28,7 @@ const HomeScreen = () => {
     if (auth.currentUser) {
       const userId = auth.currentUser.uid;
       try {
-        const response = await fetch(`https://7b79-178-220-185-8.ngrok-free.app/api/measurements/last?userId=${userId}`);
+        const response = await fetch(`https://a2da-178-220-185-8.ngrok-free.app/api/measurements/last?userId=${userId}`);
         if (response.ok) {
           const data = await response.json();
           setLastMeasurement(data);
@@ -49,7 +49,7 @@ const HomeScreen = () => {
         const userSnap = await getDoc(userRef);
         if (userSnap.exists()) {
           const userData = userSnap.data();
-          setUsername(userData.username || 'User');
+          setname(userData.name || 'User');
         } else {
           console.error('No such document!');
         }
@@ -58,6 +58,7 @@ const HomeScreen = () => {
       }
     }
   };
+  
 
   const fetchEmergencyNumber = async () => {
     if (auth.currentUser) {
@@ -110,7 +111,7 @@ const HomeScreen = () => {
 
     // Send averaged measurement to the backend
     try {
-      const response = await fetch(`https://7b79-178-220-185-8.ngrok-free.app/api/measurements?userId=${auth.currentUser.uid}`, {
+      const response = await fetch(`https://a2da-178-220-185-8.ngrok-free.app/api/measurements?userId=${auth.currentUser.uid}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -185,7 +186,7 @@ const HomeScreen = () => {
 
       {/* Username Display */}
       <View style={styles.appNameContainer}>
-        <Text style={styles.appName}>Hi, {username} 👋</Text>
+        <Text style={styles.appName}>Hi, {name} 👋</Text>
       </View>
 
       {/* Last Measurement Display */}

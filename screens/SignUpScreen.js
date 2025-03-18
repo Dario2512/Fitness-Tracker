@@ -9,7 +9,8 @@ const SignUpScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [reenterPassword, setReenterPassword] = useState('');
-  const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
+  const [surname, setSurname] = useState('');
   const [error, setError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
@@ -24,7 +25,8 @@ const SignUpScreen = ({ navigation }) => {
       const userId = userCredential.user.uid;
 
       await setDoc(doc(db, 'users', userId), {
-        username: username,
+        name: name,
+        surname: surname,
         age: '',
         height: '',
         weight: '',
@@ -41,9 +43,15 @@ const SignUpScreen = ({ navigation }) => {
       <Text style={stylesSign.header}>Sign Up</Text>
       <TextInput
         style={stylesSign.input}
-        placeholder="Username"
-        onChangeText={setUsername}
-        value={username}
+        placeholder="Name"
+        onChangeText={setName}
+        value={name}
+      />
+      <TextInput
+        style={stylesSign.input}
+        placeholder="Surname"
+        onChangeText={setSurname}
+        value={surname}
       />
       <TextInput
         style={stylesSign.input}

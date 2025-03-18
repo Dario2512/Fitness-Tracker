@@ -6,14 +6,14 @@ import styles from './styles/stylesUser.js';
 
 const UserScreen = ({ navigation }) => {
   const [userData, setUserData] = useState({
-    username: '',
+    name: '',
+    surname: '',
     age: '',
     height: '',
     weight: '',
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [isNewUser, setIsNewUser] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editedData, setEditedData] = useState({ ...userData });
 
@@ -35,10 +35,6 @@ const UserScreen = ({ navigation }) => {
           const data = userSnap.data();
           setUserData(data);
           setEditedData(data);
-
-          if (!data.username || !data.age || !data.height || !data.weight) {
-            setIsNewUser(true);
-          }
         } else {
           setError('No user data found!');
         }
@@ -84,7 +80,7 @@ const UserScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Name: {userData.username}</Text>
+      <Text style={styles.header}>Name: {userData.name} {userData.surname}</Text>
       <View style={styles.userInfo}>
         <Text style={styles.userInfoText}>Age: {userData.age} years</Text>
         <Text style={styles.userInfoText}>Height: {userData.height} cm</Text>
@@ -101,9 +97,15 @@ const UserScreen = ({ navigation }) => {
           
           <TextInput
             style={styles.input}
-            placeholder="Username"
-            value={editedData.username}
-            onChangeText={(text) => handleInputChange('username', text)}
+            placeholder="Name"
+            value={editedData.name}
+            onChangeText={(text) => handleInputChange('name', text)}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Surname"
+            value={editedData.surname}
+            onChangeText={(text) => handleInputChange('surname', text)}
           />
           <TextInput
             style={styles.input}
