@@ -7,7 +7,7 @@ import styles from './styles/stylesSteps'; // Import the styles
 
 const StepCounterScreen: React.FC = () => {
   const [currentSteps, setCurrentSteps] = useState(0);
-  const [weeklySteps, setWeeklySteps] = useState<{ id: string, date: string, steps: number }[]>([]);
+  const [weeklySteps, setWeeklySteps] = useState<{ id: string, date: string, steps: number, caloriesBurned?: number }[]>([]);
 
   useEffect(() => {
     const requestPermissions = async () => {
@@ -75,10 +75,9 @@ const StepCounterScreen: React.FC = () => {
       const userId = auth.currentUser.uid;
       try {
         console.log('Fetching weekly steps for userId:', userId);
-        const response = await fetch(`https://a2da-178-220-185-8.ngrok-free.app/api/steps/weekly?userId=${userId}`);
+        const response = await fetch(`https://d51e-81-181-70-235.ngrok-free.app/api/steps/weekly?userId=${userId}`);
         if (response.ok) {
           const data = await response.json();
-          //console.log('Fetched weekly steps:', data); // Add this line to debug
           setWeeklySteps(data);
         } else {
           console.error('Failed to fetch weekly steps');
@@ -97,7 +96,7 @@ const StepCounterScreen: React.FC = () => {
       const date = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
       try {
         console.log('Updating steps for userId:', userId, 'with steps:', steps, 'on date:', date);
-        const response = await fetch(`https://a2da-178-220-185-8.ngrok-free.app/api/steps/update`, {
+        const response = await fetch(`https://d51e-81-181-70-235.ngrok-free.app/api/steps/update`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -127,7 +126,9 @@ const StepCounterScreen: React.FC = () => {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.stepItem}>
-            <Text style={styles.stepText}>{formatDate(item.date)}: {item.steps} steps</Text>
+            <Text style={styles.stepText}>
+              {formatDate(item.date)}: {item.steps} steps,{"\n"} {item.caloriesBurned ? item.caloriesBurned.toFixed(0) : 'N/A'} calories burned
+            </Text>
           </View>
         )}
       />

@@ -53,8 +53,16 @@ const UserScreen = ({ navigation }) => {
     try {
       const userId = auth.currentUser.uid;
       const userRef = doc(db, 'users', userId);
-      await updateDoc(userRef, editedData);
-      setUserData(editedData);
+
+      const updatedData = {
+        ...editedData,
+        age: parseInt(editedData.age, 10),
+        height: parseInt(editedData.height, 10),
+        weight: parseInt(editedData.weight, 10),
+      };
+
+      await updateDoc(userRef, updatedData);
+      setUserData(updatedData);
       setIsModalVisible(false);
       navigation.navigate('Home');
     } catch (err) {
