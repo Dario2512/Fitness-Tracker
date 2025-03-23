@@ -1,7 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import { doc, getDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
-import { Alert, Animated, Easing, Image, Linking, Modal, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Animated, Easing, FlatList, Image, Linking, Modal, Text, TouchableOpacity, View } from 'react-native';
+import { BleManager } from 'react-native-ble-plx'; // Import the BLE manager
 import { auth, db } from '../backend/firebase/firebaseConfig';
 import bluetoothIcon from './images/Bluetooth.png'; // Add the Bluetooth icon
 import settingsIcon from './images/Gear.png';
@@ -17,6 +18,10 @@ const HomeScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [emergencyNumber, setEmergencyNumber] = useState('');
   const [emergencyName, setEmergencyName] = useState('');
+  const [bluetoothModalVisible, setBluetoothModalVisible] = useState(false);
+  const [availableDevices, setAvailableDevices] = useState([]);
+  const [connectedDevice, setConnectedDevice] = useState(null);
+  const manager = new BleManager(); // Initialize the BLE manager
 
   useEffect(() => {
     fetchLastMeasurement();
@@ -58,7 +63,6 @@ const HomeScreen = () => {
       }
     }
   };
-  
 
   const fetchEmergencyNumber = async () => {
     if (auth.currentUser) {
@@ -79,25 +83,49 @@ const HomeScreen = () => {
   };
 
   const handleMeasure = async () => {
+    if (!connectedDevice) {
+      Alert.alert('Error', 'Please connect to a Bluetooth device first.');
+      return;
+    }
+
     setIsMeasuring(true);
     animateHeart(true); // Start heart animation
 
-    // Simulate taking 5 measurements
     let totalHeartRate = 0;
     let totalSpO2 = 0;
     let totalTemperature = 0;
-    for (let i = 0; i < 5; i++) {
-      const mockHeartRate = Math.random() * 10 + 70; // Replace with real sensor data
-      const mockSpO2 = Math.random() * 5 + 95; // Replace with real sensor data
-      const mockTemperature = Math.random() * 2 + 36; // Replace with real sensor data
-      totalHeartRate += mockHeartRate;
-      totalSpO2 += mockSpO2;
-      totalTemperature += mockTemperature;
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 1 second
-    }
-    const averageHeartRate = totalHeartRate / 5;
-    const averageSpO2 = totalSpO2 / 5;
-    const averageTemperature = totalTemperature / 5;
+    let count = 0;
+
+    const subscription = connectedDevice.monitorCharacteristicForService(
+      'service-uuid', // Replace with your service UUID
+      'characteristic-uuid', // Replace with your characteristic UUID
+      (error, characteristic) => {
+        if (error) {
+          console.error('Error reading characteristic:', error);
+          return;
+        }
+
+        const data = characteristic.value; // Base64-encoded string
+        const decodedData = atob(data); // Decode Base64 string
+
+        // Parse the sensor data (assuming it's in a specific format)
+        const [heartRate, spO2, temperature] = decodedData.split(',').map(Number);
+
+        totalHeartRate += heartRate;
+        totalSpO2 += spO2;
+        totalTemperature += temperature;
+        count += 1;
+      }
+    );
+
+    // Wait for 60 seconds
+    await new Promise((resolve) => setTimeout(resolve, 60000));
+
+    subscription.remove();
+
+    const averageHeartRate = totalHeartRate / count;
+    const averageSpO2 = totalSpO2 / count;
+    const averageTemperature = totalTemperature / count;
 
     // Check if any of the measurements are abnormal
     if (averageHeartRate < 50 || averageHeartRate > 150 || averageSpO2 < 100 || averageTemperature < 35 || averageTemperature >= 37.5) {
@@ -172,6 +200,34 @@ const HomeScreen = () => {
     }
   };
 
+  const scanForDevices = () => {
+    setAvailableDevices([]);
+    manager.startDeviceScan(null, null, (error, device) => {
+      if (error) {
+        console.error('Error scanning for devices:', error);
+        return;
+      }
+      setAvailableDevices((prevDevices) => [...prevDevices, device]);
+    });
+
+    // Stop scanning after 10 seconds
+    setTimeout(() => {
+      manager.stopDeviceScan();
+    }, 10000);
+  };
+
+  const connectToDevice = async (device) => {
+    try {
+      const connectedDevice = await manager.connectToDevice(device.id);
+      setConnectedDevice(connectedDevice);
+      setBluetoothModalVisible(false);
+      Alert.alert('Connected', `Connected to ${device.name}`);
+    } catch (error) {
+      console.error('Error connecting to device:', error);
+      Alert.alert('Error', 'Failed to connect to device');
+    }
+  };
+
   return (
     <View style={styles.container}>
       {/* Logout Button */}
@@ -222,9 +278,9 @@ const HomeScreen = () => {
       {/* Measure and Bluetooth Buttons */}
       <View style={styles.measureButtonContainer}>
         <TouchableOpacity
-          style={[styles.measureButton, isMeasuring && styles.measureButtonDisabled]}
+          style={[styles.measureButton, !connectedDevice && styles.measureButtonDisabled]}
           onPress={handleMeasure}
-          disabled={isMeasuring}
+          disabled={!connectedDevice || isMeasuring}
         >
           <Text style={styles.measureButtonText}>
             {isMeasuring ? 'Measuring...' : 'Measure'}
@@ -233,7 +289,10 @@ const HomeScreen = () => {
 
         <TouchableOpacity
           style={styles.bluetoothButton}
-          onPress={() => console.log('Bluetooth button pressed')}
+          onPress={() => {
+            setBluetoothModalVisible(true);
+            scanForDevices();
+          }}
         >
           <Image source={bluetoothIcon} style={styles.bluetoothIcon} />
         </TouchableOpacity>
@@ -251,6 +310,38 @@ const HomeScreen = () => {
           <Text style={styles.navButtonText}>Maps</Text>
         </TouchableOpacity>
       </View>
+
+      {/* Bluetooth Modal */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={bluetoothModalVisible}
+        onRequestClose={() => setBluetoothModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalLabel}>Available Devices</Text>
+            <FlatList
+              data={availableDevices}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={styles.modalButton}
+                  onPress={() => connectToDevice(item)}
+                >
+                  <Text style={styles.buttonText}>{item.name || item.id}</Text>
+                </TouchableOpacity>
+              )}
+            />
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => setBluetoothModalVisible(false)}
+            >
+              <Text style={styles.buttonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
 
       {/* Emergency Modal */}
       <Modal
