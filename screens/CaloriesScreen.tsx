@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Button, FlatList, Modal, Text, TextInput, View } from 'react-native';
 import { auth } from '../backend/firebase/firebaseConfig'; // Firebase auth
 import styles from './styles/stylesCalories'; // Import modal styles
+import Constants from "expo-constants";
+
+//const NGROK_URL = Constants.expoConfig?.extra?.NGROK_URL;
 
 interface CalorieEntry {
   date: any; // Allow any type for date to handle both string and Firestore Timestamp
@@ -31,7 +34,7 @@ const CaloriesScreen = () => {
   // Fetch today's calories
   const fetchTodaysCalories = async () => {
     try {
-      const response = await fetch(`https://d51e-81-181-70-235.ngrok-free.app/todaysCalories?userId=${userId}`);
+      const response = await fetch(`https://6707-178-220-185-182.ngrok-free.app/todaysCalories?userId=${userId}`);
       const data = await response.json();
       setTodayCalories(data.calories || 0);
     } catch (error) {
@@ -42,7 +45,7 @@ const CaloriesScreen = () => {
   // Fetch weekly calories
   const fetchWeeklyCalories = async () => {
     try {
-      const response = await fetch(`https://d51e-81-181-70-235.ngrok-free.app/weeklyCalories?userId=${userId}`);
+      const response = await fetch(`https://6707-178-220-185-182.ngrok-free.app/weeklyCalories?userId=${userId}`);
       const data = await response.json();
       const groupedData = groupCaloriesByDate(data.weeklyCalories || []);
       setWeeklyCalories(groupedData);
@@ -96,7 +99,7 @@ const CaloriesScreen = () => {
     }
   
     try {
-      const response = await fetch('https://d51e-81-181-70-235.ngrok-free.app/incrementFoodCalories', {
+      const response = await fetch(`https://6707-178-220-185-182.ngrok-free.app/incrementFoodCalories`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

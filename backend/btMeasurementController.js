@@ -12,7 +12,15 @@ const db = admin.firestore();
 
 exports.handleMeasurement = async (req, res) => {
   try {
+    // Log the request body for debugging
+    console.log('Received request body:', req.body);
+    
     const { userId, heartRate, spO2, temperature } = req.body;
+
+    // Check if userId is provided
+    if (!userId || typeof userId !== 'string' || userId.trim() === '') {
+      return res.status(400).json({ error: 'Invalid or missing userId' });
+    }
 
     // Save data to Firestore
     await db.collection('users').doc(userId).collection('measurements').add({
@@ -40,6 +48,8 @@ exports.getLastMeasurement = async (req, res) => {
       return res.status(400).json({ error: 'Invalid or missing userId' });
     }
 
+    console.log('Received userId for fetching last measurement:', userId);
+
     // Fetch the last measurement for the given user
     const snapshot = await db
       .collection('users')
@@ -54,6 +64,8 @@ exports.getLastMeasurement = async (req, res) => {
     }
 
     const lastMeasurement = snapshot.docs[0].data();
+    console.log('Fetched last measurement:', lastMeasurement);
+
     res.status(200).json(lastMeasurement);
   } catch (error) {
     console.error('Error fetching last measurement:', error);

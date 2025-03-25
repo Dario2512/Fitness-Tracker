@@ -21,10 +21,10 @@ app.get('/', (req, res) => {
 
 
 // Define POST route for saving measurements from Bluetooth
-app.post('/api/bt-measurements', btMeasurementController.handleMeasurement);
+app.post('/api/measurements', btMeasurementController.handleMeasurement);
 
 // Define GET route for fetching the last measurement from Bluetooth
-app.get('/api/bt-measurements/last', btMeasurementController.getLastMeasurement);
+app.get('/api/measurements/last', btMeasurementController.getLastMeasurement);
 
 // Calories route
 // Route to get today's calories

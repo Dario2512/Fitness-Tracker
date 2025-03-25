@@ -18,6 +18,9 @@ export default {
       supportsTablet: true,
       bundleIdentifier: "com.anonymous.Licenta",
       buildNumber: "1.0.0",
+      infoPlist: {
+        ITSAppUsesNonExemptEncryption: false,
+      },
     },
     android: {
       adaptiveIcon: {
@@ -25,10 +28,18 @@ export default {
         backgroundColor: "#ffffff",
       },
       package: "com.anonymous.Licenta",
-      permissions: ["ACTIVITY_RECOGNITION", "INTERNET"],
+      permissions: [
+        "ACTIVITY_RECOGNITION",
+        "INTERNET",
+        "BLUETOOTH",
+        "BLUETOOTH_ADMIN",
+        "BLUETOOTH_SCAN",
+        "BLUETOOTH_CONNECT",
+        "BLUETOOTH_ADVERTISE",
+      ],
       config: {
         googleMaps: {
-          apiKey: process.env.MAPS_API_KEY, // Uses .env value
+          apiKey: process.env.MAPS_API_KEY, 
         },
       },
     },
@@ -38,13 +49,29 @@ export default {
       favicon: "./assets/images/favicon.png",
     },
     extra: {
-      mapsApiKey: process.env.MAPS_API_KEY, // Makes it available in your app
+      mapsApiKey: process.env.MAPS_API_KEY, 
       eas: {
         projectId: "531e1507-04d5-43e1-9b36-a7bda4d0fb83",
       },
     },
     owner: "dario25122002",
-    plugins: ["expo-router", "expo-font"],
+    plugins: [
+      "expo-router",
+      "expo-font",
+      [
+        "expo-build-properties",
+        {
+          android: {
+            "manifestApplicationMetaData": [
+              {
+                "name": "com.google.android.geo.API_KEY",
+                "value": process.env.MAPS_API_KEY,
+              },
+            ],
+          },
+        },
+      ],
+    ],
     experiments: {
       typedRoutes: true,
     },

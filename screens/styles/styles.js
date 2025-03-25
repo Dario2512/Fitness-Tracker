@@ -173,21 +173,32 @@ const styles = StyleSheet.create({
   modalLabel: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFF', // White text for modal label
+    color: '#FFF', 
     marginBottom: 20,
   },
   modalButton: {
-    backgroundColor: '#FF6347', // Tomato red for modal buttons
+    backgroundColor: '#FF6347', 
     padding: 10,
     borderRadius: 10,
     marginVertical: 10,
-    width: '80%',
-    alignItems: 'center',
+    width: '100%', 
+    alignItems: 'flex-start', 
   },
   buttonText: {
-    color: '#FFF', // White text for buttons
+    color: '#FFF', 
     fontSize: 16,
     fontWeight: 'bold',
+    flexWrap: 'wrap', 
+    textAlign: 'left', 
+  },
+  closeButton: {
+    backgroundColor: '#FF6347', // Tomato red for the close button
+    padding: 10,
+    borderRadius: 10,
+    marginVertical: 10,
+    width: '50%', // Make the button smaller (50% of the modal width)
+    alignItems: 'center', // Center the text inside the button
+    alignSelf: 'center', // Center the button within the modal
   },
 });
 

@@ -8,7 +8,7 @@ import styles from './styles/stylesMaps';
 import axios from 'axios';
 import Constants from 'expo-constants';
 
-const MAPS_API_KEY = Constants.expoConfig?.extra?.mapsApiKey; // Fetch API Key
+const MAPS_API_KEY = Constants.expoConfig?.extra?.mapsApiKey; 
 
 const MapsScreen: React.FC = () => {
   const [location, setLocation] = useState<Location.LocationObject | null>(null);

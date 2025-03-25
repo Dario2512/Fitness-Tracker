@@ -17,6 +17,7 @@ import SignUpScreen from './screens/SignUpScreen';
 import StatsScreen from './screens/StatsScreen';
 import StepCounterScreen from './screens/StepCounterScreen';
 import UserScreen from './screens/UserScreen';
+import BtHomeScreen from './screens/BtHomeScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -127,7 +128,7 @@ export default function App() {
         />
         <Stack.Screen 
           name="Home" 
-          component={HomeScreen} 
+          component={BtHomeScreen} 
           options={{ 
             headerShown: false,
             title: userData ? `Welcome, ${userData.name}` : "Welcome"
