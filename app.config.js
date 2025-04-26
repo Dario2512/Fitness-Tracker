@@ -2,7 +2,7 @@ import "dotenv/config";
 
 export default {
   expo: {
-    name: "Licenta",
+    name: "Life Tracker (Mac Build)",
     slug: "Licenta",
     version: "1.0.0",
     orientation: "portrait",

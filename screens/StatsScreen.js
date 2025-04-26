@@ -80,11 +80,13 @@ const StatsScreen = () => {
         const avgTemperature =
           dailyMeasurements.reduce((sum, m) => sum + m.temperature, 0) / dailyMeasurements.length;
   
-        // Add the day and averages to the data arrays
-        filteredDays.push(day);
-        heartRateData.push(avgHeartRate);
-        spO2Data.push(avgSpO2);
-        temperatureData.push(avgTemperature);
+        // Ensure averages are valid numbers
+        if (!isNaN(avgHeartRate) && !isNaN(avgSpO2) && !isNaN(avgTemperature)) {
+          filteredDays.push(day);
+          heartRateData.push(avgHeartRate);
+          spO2Data.push(avgSpO2);
+          temperatureData.push(avgTemperature);
+        }
       }
     });
   
@@ -118,7 +120,7 @@ const StatsScreen = () => {
 
   return (
     <View style={styles.container}>
-      {measurements.length > 0 ? (
+      {measurements.length > 0 && heartRateData.length > 0 ? (
         <>
           <LineChart
             data={{

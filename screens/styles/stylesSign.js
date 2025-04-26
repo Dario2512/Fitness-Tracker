@@ -7,8 +7,21 @@ const stylesSign = StyleSheet.create({
     padding: 40,
     backgroundColor: '#1f1f1f', // Dark background for consistency with black theme
   },
+  logo: {
+    width: 120, // Adjust the width of the logo
+    height: 120, // Adjust the height of the logo
+    alignSelf: 'center', // Center the logo horizontally
+    marginBottom: 10, // Add spacing below the logo
+  },
+  appName: {
+    fontSize: 28, // Font size for the app name
+    fontWeight: 'bold', // Bold text
+    textAlign: 'center', // Center the text
+    color: '#fff', // White color for the app name
+    marginBottom: 40, // Add spacing below the app name
+  },
   header: {
-    fontSize: 30,
+    fontSize: 15,
     marginBottom: 40,
     textAlign: 'center',
     color: '#fff', // White color for the header text
