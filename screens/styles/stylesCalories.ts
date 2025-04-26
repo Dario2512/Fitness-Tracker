@@ -4,7 +4,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#2c2c2c',
+    backgroundColor: '#121212',
   },
   header: {
     fontSize: 20,
@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     color: '#fff', // White text for today's calories
   },
   card: {
-    backgroundColor: '#424242',
+    backgroundColor: '#1A1A1A',
     padding: 15,
     marginBottom: 10,
     borderRadius: 10,
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   modalContent: {
-    backgroundColor: '#2c2c2c',
+    backgroundColor: '##1A1A1A',
     padding: 20,
     borderRadius: 10,
     width: '80%',
