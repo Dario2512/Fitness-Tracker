@@ -14,6 +14,7 @@ import PasswordChangeScreen from './screens/PasswordChangeScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import SignInScreen from './screens/SignInScreen';
 import SignUpScreen from './screens/SignUpScreen';
+import SetUserDetailsScreen from './screens/SetUserDetailsScreen';
 import StatsScreen from './screens/StatsScreen';
 import StepCounterScreen from './screens/StepCounterScreen';
 import UserScreen from './screens/UserScreen';
@@ -125,6 +126,11 @@ export default function App() {
           name="SignUpScreen" 
           component={SignUpScreen}
           options={{ headerShown: false }}  
+        />
+        <Stack.Screen 
+        name="SetUserDetailsScreen" 
+        component={SetUserDetailsScreen}
+        options={{ headerShown: false }}
         />
         <Stack.Screen 
           name="Home" 

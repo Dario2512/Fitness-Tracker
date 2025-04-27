@@ -26,10 +26,10 @@ const SignInScreen = ({ navigation }) => {
           navigation.navigate('Home', { name: userData.name });
           console.log('Successful sign in.');
         } else {
-          navigation.navigate('User');
+          navigation.navigate('SetUserDetailsScreen');
         }
       } else {
-        navigation.navigate('User');
+        navigation.navigate('SetUserDetailsScreen');
       }
     } catch (error) {
       console.error('Error during sign in:', error);

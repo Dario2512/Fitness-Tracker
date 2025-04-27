@@ -5,13 +5,13 @@ const stylesSign = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 40,
-    backgroundColor: '#1f1f1f', // Dark background for consistency with black theme
+    backgroundColor: '#121212', 
   },
   logo: {
-    width: 120, // Adjust the width of the logo
-    height: 120, // Adjust the height of the logo
-    alignSelf: 'center', // Center the logo horizontally
-    marginBottom: 10, // Add spacing below the logo
+    width: 120, 
+    height: 120, 
+    alignSelf: 'center', 
+    marginBottom: 10, 
   },
   appName: {
     fontSize: 28, // Font size for the app name
@@ -21,7 +21,7 @@ const stylesSign = StyleSheet.create({
     marginBottom: 40, // Add spacing below the app name
   },
   header: {
-    fontSize: 15,
+    fontSize: 20,
     marginBottom: 40,
     textAlign: 'center',
     color: '#fff', // White color for the header text
