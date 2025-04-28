@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, FlatList, Modal, Text, TextInput, View } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { auth } from '../backend/firebase/firebaseConfig'; // Firebase auth
 import styles from './styles/stylesCalories'; // Import modal styles
 import Constants from "expo-constants";
@@ -34,7 +35,7 @@ const CaloriesScreen = () => {
   // Fetch today's calories
   const fetchTodaysCalories = async () => {
     try {
-      const response = await fetch(`https://6707-178-220-185-182.ngrok-free.app/todaysCalories?userId=${userId}`);
+      const response = await fetch(`https://fce6-178-220-185-182.ngrok-free.app/todaysCalories?userId=${userId}`);
       const data = await response.json();
       setTodayCalories(data.calories || 0);
     } catch (error) {
@@ -45,7 +46,7 @@ const CaloriesScreen = () => {
   // Fetch weekly calories
   const fetchWeeklyCalories = async () => {
     try {
-      const response = await fetch(`https://6707-178-220-185-182.ngrok-free.app/weeklyCalories?userId=${userId}`);
+      const response = await fetch(`https://fce6-178-220-185-182.ngrok-free.app/weeklyCalories?userId=${userId}`);
       const data = await response.json();
       const groupedData = groupCaloriesByDate(data.weeklyCalories || []);
       setWeeklyCalories(groupedData);
@@ -99,7 +100,7 @@ const CaloriesScreen = () => {
     }
   
     try {
-      const response = await fetch(`https://6707-178-220-185-182.ngrok-free.app/incrementFoodCalories`, {
+      const response = await fetch(`https://fce6-178-220-185-182.ngrok-free.app/incrementFoodCalories`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -176,11 +177,12 @@ const CaloriesScreen = () => {
       <Text style={styles.todayBox}>{todayCalories} kcal</Text>
 
       <View style={styles.buttonsContainer}>
-        <Button
-          title="Add Food Calories"
-          onPress={() => setShowFoodModal(true)}
-          color="#FF6347" // Tomato red color for button
-        />
+      <TouchableOpacity
+        style={styles.modalButton} 
+        onPress={() => setShowFoodModal(true)}
+      >
+        <Text style={styles.modalButtonText}>Add Food Calories</Text>
+      </TouchableOpacity>
       </View>
 
       <Text style={styles.header}>Weekly Calories</Text>
@@ -215,8 +217,12 @@ const CaloriesScreen = () => {
               value={foodCalories}
               onChangeText={setFoodCalories}
             />
-            <Button title="Save" onPress={addFoodCalories} color="tomato" />
-            <Button title="Cancel" onPress={() => setShowFoodModal(false)} color="tomato" />
+            <TouchableOpacity style={styles.modalButton} onPress={addFoodCalories}>
+              <Text style={styles.modalButtonText}>Save</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.cancelButton} onPress={() => setShowFoodModal(false)}>
+              <Text style={styles.cancelButtonText}>Cancel</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>

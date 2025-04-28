@@ -146,7 +146,7 @@ export default function App() {
           options={{
             headerStyle: { backgroundColor: '#121212' }, 
             headerTintColor: 'white',
-            headerTitle: userData ? userData.name : "User Info", 
+            headerTitle: "User Info", 
           }} 
         />
         <Stack.Screen 
@@ -200,7 +200,7 @@ export default function App() {
           options={{
             headerStyle: { backgroundColor: '#121212' },
             headerTintColor: 'white',
-            headerTitle: 'Change Password',
+            headerTitle: '',
           }}
         />
         <Stack.Screen

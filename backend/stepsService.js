@@ -3,12 +3,31 @@ const { db } = require('./firebase/firebaseConfigBackend');
 const getWeeklySteps = async (userId) => {
   const stepsRef = db.collection('users').doc(userId).collection('steps');
   try {
-    const stepsSnapshot = await stepsRef.orderBy('date', 'desc').limit(7).get();
-    const stepsData = [];
+    // Get the last 7 days
+    const today = new Date();
+    const last7Days = [];
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(today);
+      date.setDate(today.getDate() - i); // Subtract i days
+      const formattedDate = date.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+      last7Days.push(formattedDate);
+    }
+
+    // Fetch all steps data for the last 7 days
+    const stepsSnapshot = await stepsRef.where('date', 'in', last7Days).get();
+    const stepsData = {};
+
     stepsSnapshot.forEach(doc => {
-      stepsData.push({ id: doc.id, date: doc.data().date, steps: doc.data().steps, caloriesBurned: doc.data().caloriesBurned });
+      const data = doc.data();
+      stepsData[data.date] = { id: doc.id, date: data.date, steps: data.steps, caloriesBurned: data.caloriesBurned };
     });
-    return stepsData;
+
+    // Fill in missing days with 0 steps
+    const weeklySteps = last7Days.map(date => {
+      return stepsData[date] || { id: `${userId}_${date}`, date, steps: 0, caloriesBurned: 0 };
+    });
+
+    return weeklySteps;
   } catch (error) {
     console.error(`Error getting weekly steps for userId: ${userId}`, error);
     throw error;

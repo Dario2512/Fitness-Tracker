@@ -63,15 +63,19 @@ const BtHomeScreen = () => {
     if (auth.currentUser) {
       const userId = auth.currentUser.uid;
       try {
-        const response = await fetch(`https://b703-178-220-185-182.ngrok-free.app/api/measurements/last?userId=${userId}`);
+        const response = await fetch(`https://fce6-178-220-185-182.ngrok-free.app/api/measurements/last?userId=${userId}`);
         if (response.ok) {
           const data = await response.json();
-          setLastMeasurement(data);
+          if (data) {
+            setLastMeasurement(data); 
+          } else {
+            setLastMeasurement(null);
+          }
         } else {
-          console.error('Failed to fetch last measurement');
+          setLastMeasurement(null); 
         }
       } catch (error) {
-        console.error('Error fetching last measurement:', error);
+        setLastMeasurement(null); 
       }
     }
   };
@@ -137,7 +141,7 @@ const BtHomeScreen = () => {
         CHARACTERISTIC_UUID, // Characteristic UUID
         async (error, characteristic) => {
           if (error) {
-            console.error('Error reading characteristic:', error);
+            //console.error('Error reading characteristic:', error);
             return;
           }
   
@@ -199,7 +203,7 @@ const BtHomeScreen = () => {
   
       // Check for abnormal values
       if (averageHeartRate < 50 || averageHeartRate > 150 || 
-          averageSpO2 < 90 || averageTemperature < 35.1 || 
+          averageSpO2 < 92 || averageTemperature < 35.1 || 
           averageTemperature > 37.5) {
         setModalVisible(true);
   
@@ -212,7 +216,7 @@ const BtHomeScreen = () => {
   
       // Send averaged measurement to the backend
       try {
-        const response = await fetch(`https://b703-178-220-185-182.ngrok-free.app/api/measurements?userId=${auth.currentUser.uid}`, {
+        const response = await fetch(`https://fce6-178-220-185-182.ngrok-free.app/api/measurements?userId=${auth.currentUser.uid}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -366,7 +370,7 @@ const BtHomeScreen = () => {
       </View>
 
       {/* Last Measurement Display */}
-      {lastMeasurement && (
+      {lastMeasurement ? (
         <View style={styles.lastMeasurement}>
           <View style={styles.lastMeasurementHeader}>
             <Text style={styles.header}>Last Measurement:</Text>
@@ -383,6 +387,10 @@ const BtHomeScreen = () => {
           <Text style={styles.measurementText}>
             Temperature: {lastMeasurement.temperature ? lastMeasurement.temperature.toFixed(1) : 'N/A'} °C
           </Text>
+        </View>
+      ) : (
+        <View style={styles.noMeasurementContainer}>
+          <Text style={styles.noMeasurementText}>No measurements available. Start measuring to see your stats!</Text>
         </View>
       )}
 

@@ -46,11 +46,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.7)', // Dark background with transparency for modal
+    backgroundColor: '#1e1e1e', // Dark background with transparency for modal
     padding: 20,
   },
   modalContent: {
-    backgroundColor: '##1A1A1A',
+    backgroundColor: '#1A1A1A',
     padding: 20,
     borderRadius: 10,
     width: '80%',
@@ -76,26 +76,31 @@ const styles = StyleSheet.create({
   modalButton: {
     marginTop: 10,
     backgroundColor: '#FF6347',
-    padding: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
     borderRadius: 5,
-    width: '100%',
     alignItems: 'center',
+    width: '80%',
+    alignSelf: 'center',
   },
   modalButtonText: {
     color: 'white',
     fontSize: 16,
+    fontWeight: 'bold',
   },
   cancelButton: {
-    marginTop: 15,
-    backgroundColor: '#FF6347',
-    padding: 10,
+    marginTop: 15, // Add spacing between Save and Cancel buttons
+    backgroundColor: '#555', // Darker shade for cancel button
+    paddingVertical: 10,
+    paddingHorizontal: 20,
     borderRadius: 5,
-    width: '100%',
     alignItems: 'center',
+    width: '80%', // Adjust button width
   },
   cancelButtonText: {
     color: 'white',
     fontSize: 16,
+    fontWeight: 'bold',
   },
   buttonsContainer: {
     marginBottom: 20,
