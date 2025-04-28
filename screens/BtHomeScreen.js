@@ -7,7 +7,7 @@ import { auth, db } from '../backend/firebase/firebaseConfig';
 import { Buffer } from 'buffer';
 import bluetoothIcon from './images/Bluetooth.png'; // Add the Bluetooth icon
 import settingsIcon from './images/Gear.png';
-import heartIcon from './images/Heart.png';
+import heartIcon from './images/HeartV2.png';
 import styles from './styles/styles';
 import Constants from "expo-constants";
 
@@ -63,15 +63,19 @@ const BtHomeScreen = () => {
     if (auth.currentUser) {
       const userId = auth.currentUser.uid;
       try {
-        const response = await fetch(`https://6707-178-220-185-182.ngrok-free.app/api/measurements/last?userId=${userId}`);
+        const response = await fetch(`https://fce6-178-220-185-182.ngrok-free.app/api/measurements/last?userId=${userId}`);
         if (response.ok) {
           const data = await response.json();
-          setLastMeasurement(data);
+          if (data) {
+            setLastMeasurement(data); 
+          } else {
+            setLastMeasurement(null);
+          }
         } else {
-          console.error('Failed to fetch last measurement');
+          setLastMeasurement(null); 
         }
       } catch (error) {
-        console.error('Error fetching last measurement:', error);
+        setLastMeasurement(null); 
       }
     }
   };
@@ -128,14 +132,16 @@ const BtHomeScreen = () => {
   
     console.log("Starting measurement...");
   
+    let subscription; // Declare subscription variable
+  
     try {
       // Monitor the characteristic
-      const subscription = connectedDevice.monitorCharacteristicForService(
-        '0000ffe0-0000-1000-8000-00805f9b34fb', // Service UUID
-        '0000ffe1-0000-1000-8000-00805f9b34fb', // Characteristic UUID
+      subscription = connectedDevice.monitorCharacteristicForService(
+        SERVICE_UUID, // Service UUID
+        CHARACTERISTIC_UUID, // Characteristic UUID
         async (error, characteristic) => {
           if (error) {
-            console.error('Error reading characteristic:', error);
+            //console.error('Error reading characteristic:', error);
             return;
           }
   
@@ -164,7 +170,7 @@ const BtHomeScreen = () => {
             count += 1;
             console.log(`Received: HR=${heartRate}, SpO2=${spO2}, Temp=${temperature}`);
           } else {
-            console.error('Invalid numeric data:', receivedData);
+            console.error('Invalid numeric data:', decodedData);
           }
         }
       );
@@ -197,8 +203,8 @@ const BtHomeScreen = () => {
   
       // Check for abnormal values
       if (averageHeartRate < 50 || averageHeartRate > 150 || 
-          averageSpO2 < 90 || averageTemperature < 37.5 || 
-          averageTemperature >= 35.1) {
+          averageSpO2 < 92 || averageTemperature < 35.1 || 
+          averageTemperature > 37.5) {
         setModalVisible(true);
   
         setTimeout(() => {
@@ -210,7 +216,7 @@ const BtHomeScreen = () => {
   
       // Send averaged measurement to the backend
       try {
-        const response = await fetch(`https://6707-178-220-185-182.ngrok-free.app/api/measurements?userId=${auth.currentUser.uid}`, {
+        const response = await fetch(`https://fce6-178-220-185-182.ngrok-free.app/api/measurements?userId=${auth.currentUser.uid}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -364,7 +370,7 @@ const BtHomeScreen = () => {
       </View>
 
       {/* Last Measurement Display */}
-      {lastMeasurement && (
+      {lastMeasurement ? (
         <View style={styles.lastMeasurement}>
           <View style={styles.lastMeasurementHeader}>
             <Text style={styles.header}>Last Measurement:</Text>
@@ -381,6 +387,10 @@ const BtHomeScreen = () => {
           <Text style={styles.measurementText}>
             Temperature: {lastMeasurement.temperature ? lastMeasurement.temperature.toFixed(1) : 'N/A'} °C
           </Text>
+        </View>
+      ) : (
+        <View style={styles.noMeasurementContainer}>
+          <Text style={styles.noMeasurementText}>No measurements available. Start measuring to see your stats!</Text>
         </View>
       )}
 

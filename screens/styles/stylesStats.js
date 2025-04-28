@@ -45,4 +45,41 @@ export default StyleSheet.create({
     fontSize: 16,
     color: 'white',
   },
+  noDataText: {
+    fontSize: 18,
+    color: '#FFF',
+    textAlign: 'center',
+    marginVertical: 20,
+  },
+  listContent: {
+    paddingBottom: 20,
+  },
+  legendContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    marginVertical: 10,
+  },
+  legendItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  legendColor: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    marginRight: 8,
+  },
+  legendText: {
+    color: '#FFF',
+    fontSize: 14,
+  },
+  historyHeader: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#FFF',
+    textAlign: 'start',
+    marginVertical: 10,
+    marginLeft: 20,
+  },
 });

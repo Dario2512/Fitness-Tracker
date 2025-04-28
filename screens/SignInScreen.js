@@ -1,10 +1,10 @@
+import React, { useState } from 'react';
+import { Alert, Text, TextInput, TouchableOpacity, View, Image } from 'react-native'; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
-import React, { useState } from 'react';
-import { Alert, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { auth, db } from '../backend/firebase/firebaseConfig';
-import stylesSign from './styles/stylesSign'; // Import the styles
+import stylesSign from './styles/stylesSign';
 
 const SignInScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -26,10 +26,10 @@ const SignInScreen = ({ navigation }) => {
           navigation.navigate('Home', { name: userData.name });
           console.log('Successful sign in.');
         } else {
-          navigation.navigate('User');
+          navigation.navigate('SetUserDetailsScreen');
         }
       } else {
-        navigation.navigate('User');
+        navigation.navigate('SetUserDetailsScreen');
       }
     } catch (error) {
       console.error('Error during sign in:', error);
@@ -40,10 +40,18 @@ const SignInScreen = ({ navigation }) => {
 
   return (
     <View style={stylesSign.container}>
-      <Text style={stylesSign.header}>Sign In</Text>
+      {/* Add the app logo */}
+      <Image
+        source={require('./images/SignLogo.png')}
+        style={stylesSign.logo}
+      />
+      {/* Add the app name */}
+      <Text style={stylesSign.appName}>Life Tracker</Text>
+
       <TextInput
         style={stylesSign.input}
         placeholder="Email"
+        placeholderTextColor="#fff"
         onChangeText={setEmail}
         value={email}
         keyboardType="email-address"
@@ -52,6 +60,7 @@ const SignInScreen = ({ navigation }) => {
       <TextInput
         style={stylesSign.input}
         placeholder="Password"
+        placeholderTextColor="#fff"
         onChangeText={setPassword}
         value={password}
         secureTextEntry

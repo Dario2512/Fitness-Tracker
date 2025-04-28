@@ -49,6 +49,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  noMeasurementContainer: {
+    marginTop: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  noMeasurementText: {
+    fontSize: 16,
+    color: '#888', // Light gray text
+    textAlign: 'center',
+    paddingHorizontal: 20,
+  },
   historyButton: {
     backgroundColor: '#1A1A1A',
     padding: 10,

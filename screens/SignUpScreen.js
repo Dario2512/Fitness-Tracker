@@ -40,22 +40,24 @@ const SignUpScreen = ({ navigation }) => {
 
   return (
     <View style={stylesSign.container}>
-      <Text style={stylesSign.header}>Sign Up</Text>
       <TextInput
         style={stylesSign.input}
         placeholder="Name"
+        placeholderTextColor="#fff"
         onChangeText={setName}
         value={name}
       />
       <TextInput
         style={stylesSign.input}
         placeholder="Surname"
+        placeholderTextColor="#fff"
         onChangeText={setSurname}
         value={surname}
       />
       <TextInput
         style={stylesSign.input}
         placeholder="Email"
+        placeholderTextColor="#fff"
         onChangeText={setEmail}
         value={email}
         keyboardType="email-address"
@@ -64,6 +66,7 @@ const SignUpScreen = ({ navigation }) => {
       <TextInput
         style={stylesSign.input}
         placeholder="Password"
+        placeholderTextColor="#fff"
         onChangeText={setPassword}
         value={password}
         secureTextEntry
@@ -71,6 +74,7 @@ const SignUpScreen = ({ navigation }) => {
       <TextInput
         style={stylesSign.input}
         placeholder="Re-enter Password"
+        placeholderTextColor="#fff"
         onChangeText={setReenterPassword}
         value={reenterPassword}
         secureTextEntry

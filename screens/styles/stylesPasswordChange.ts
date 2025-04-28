@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: 'white',
-    marginBottom: 20,
+    marginBottom: 40,
     textAlign: 'center',
   },
   input: {
@@ -20,12 +20,16 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     marginBottom: 15,
+    borderWidth: 1,
+    borderColor: '#ff6347', 
   },
   button: {
     backgroundColor: '#ff6347',
-    padding: 15,
+    paddingVertical: 10, 
+    paddingHorizontal: 30,
+    marginTop: 20, 
     borderRadius: 5,
-    alignItems: 'center',
+    alignSelf: 'center', 
   },
   buttonText: {
     color: 'white',

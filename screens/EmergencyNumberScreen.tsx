@@ -53,7 +53,6 @@ const EmergencyNumberScreen: React.FC = () => {
       setEmergencyName(newEmergencyName);
       setEmergencyNumber(newEmergencyNumber);
       setModalVisible(false);
-      //Alert.alert('Success', 'Emergency number saved successfully');
     } catch (error) {
       console.error('Error saving emergency number:', error);
       Alert.alert('Error', 'Failed to save emergency number');
@@ -65,11 +64,14 @@ const EmergencyNumberScreen: React.FC = () => {
       <Text style={styles.label}>Emergency Info:</Text>
       <Text style={styles.emergencyName}>{emergencyName}</Text>
       <Text style={styles.emergencyNumber}>{emergencyNumber}</Text>
-      <TouchableOpacity style={styles.button} onPress={() => {
-        setNewEmergencyName(emergencyName);
-        setNewEmergencyNumber(emergencyNumber);
-        setModalVisible(true);
-      }}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          setNewEmergencyName(emergencyName);
+          setNewEmergencyNumber(emergencyNumber);
+          setModalVisible(true);
+        }}
+      >
         <Text style={styles.buttonText}>Edit</Text>
       </TouchableOpacity>
 

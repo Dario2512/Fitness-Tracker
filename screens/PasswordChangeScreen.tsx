@@ -35,6 +35,7 @@ const PasswordChangeScreen: React.FC = () => {
       <TextInput
         style={styles.input}
         placeholder="Current Password"
+        placeholderTextColor="white"
         secureTextEntry
         value={currentPassword}
         onChangeText={setCurrentPassword}
@@ -42,6 +43,7 @@ const PasswordChangeScreen: React.FC = () => {
       <TextInput
         style={styles.input}
         placeholder="New Password"
+        placeholderTextColor="white"
         secureTextEntry
         value={newPassword}
         onChangeText={setNewPassword}
@@ -49,6 +51,7 @@ const PasswordChangeScreen: React.FC = () => {
       <TextInput
         style={styles.input}
         placeholder="Repeat New Password"
+        placeholderTextColor="white"
         secureTextEntry
         value={repeatNewPassword}
         onChangeText={setRepeatNewPassword}
