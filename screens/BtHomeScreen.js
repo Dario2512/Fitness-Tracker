@@ -2,25 +2,29 @@ import { useNavigation } from '@react-navigation/native';
 import { doc, getDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { Alert, Animated, Easing, FlatList, Image, Linking, Modal, PermissionsAndroid, Text, TouchableOpacity, View, Platform } from 'react-native';
-import { BleManager } from 'react-native-ble-plx'; // Import the BLE manager
+import { BleManager } from 'react-native-ble-plx'; 
 import { auth, db } from '../backend/firebase/firebaseConfig';
 import { Buffer } from 'buffer';
-import bluetoothIcon from './images/Bluetooth.png'; // Add the Bluetooth icon
+import * as SMS from 'expo-sms';
+import * as Location from 'expo-location';
+import bluetoothIcon from './images/Bluetooth.png'; 
 import settingsIcon from './images/Gear.png';
 import heartIcon from './images/HeartV2.png';
 import styles from './styles/styles';
 import Constants from "expo-constants";
 
-//const NGROK_URL = Constants.expoConfig?.extra?.NGROK_URL;
 const manager = new BleManager();
+let timerInterval;
 
 const BtHomeScreen = () => {
   const navigation = useNavigation();
   const [lastMeasurement, setLastMeasurement] = useState(null);
   const [isMeasuring, setIsMeasuring] = useState(false);
-  const [heartAnimation] = useState(new Animated.Value(1)); // Initial scale of heart
+  const [heartAnimation] = useState(new Animated.Value(1)); 
   const [name, setname] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+  const [timer, setTimer] = useState(10);
+  const [location, setLocation] = useState(null);
   const [emergencyNumber, setEmergencyNumber] = useState('');
   const [emergencyName, setEmergencyName] = useState('');
   const [bluetoothModalVisible, setBluetoothModalVisible] = useState(false);
@@ -33,7 +37,39 @@ const BtHomeScreen = () => {
     fetchLastMeasurement();
     fetchUserData();
     fetchEmergencyNumber();
-    requestBluetoothPermissions(); // Request Bluetooth permissions
+    requestBluetoothPermissions(); 
+  }, []);
+
+  useEffect(() => {
+    if (modalVisible) {
+      startTimer();
+      fetchLocation();
+    } else {
+      clearTimer();
+    }
+  }, [modalVisible]);
+
+  useEffect(() => {
+    const initializeLocation = async () => {
+      console.log('Fetching location on screen load...');
+      setLocation(null); 
+      try {
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+          Alert.alert('Permission Denied', 'Location permission is required to send your location.');
+          return;
+        }
+  
+        const location = await Location.getCurrentPositionAsync({});
+        console.log('Location fetched on screen load:', location.coords);
+        setLocation(location.coords); 
+      } catch (error) {
+        console.error('Error fetching location on screen load:', error);
+        setLocation(null); 
+      }
+    };
+  
+    initializeLocation(); 
   }, []);
 
   const requestBluetoothPermissions = async () => {
@@ -63,7 +99,7 @@ const BtHomeScreen = () => {
     if (auth.currentUser) {
       const userId = auth.currentUser.uid;
       try {
-        const response = await fetch(`https://fce6-178-220-185-182.ngrok-free.app/api/measurements/last?userId=${userId}`);
+        const response = await fetch(`https://0779-178-220-185-88.ngrok-free.app/api/measurements/last?userId=${userId}`);
         if (response.ok) {
           const data = await response.json();
           if (data) {
@@ -123,7 +159,7 @@ const BtHomeScreen = () => {
     }
   
     setIsMeasuring(true);
-    animateHeart(true); // Start heart animation
+    animateHeart(true); 
   
     let totalHeartRate = 0;
     let totalSpO2 = 0;
@@ -132,16 +168,14 @@ const BtHomeScreen = () => {
   
     console.log("Starting measurement...");
   
-    let subscription; // Declare subscription variable
+    let subscription; 
   
     try {
-      // Monitor the characteristic
       subscription = connectedDevice.monitorCharacteristicForService(
-        SERVICE_UUID, // Service UUID
-        CHARACTERISTIC_UUID, // Characteristic UUID
+        SERVICE_UUID,
+        CHARACTERISTIC_UUID, 
         async (error, characteristic) => {
           if (error) {
-            //console.error('Error reading characteristic:', error);
             return;
           }
   
@@ -153,7 +187,6 @@ const BtHomeScreen = () => {
           let decodedData = Buffer.from(characteristic.value, 'base64').toString('utf-8').trim();
           console.log('Decoded Data:', decodedData);
   
-          // Process data
           const values = decodedData.split(',').map(value => parseFloat(value));
   
           if (values.length !== 3) {
@@ -175,13 +208,11 @@ const BtHomeScreen = () => {
         }
       );
   
-      // Wait for 60 seconds to collect data
       await new Promise((resolve) => setTimeout(resolve, 5000));
   
-      // Stop monitoring after the time interval
       if (subscription) {
         console.log("Stopping monitoring...");
-        subscription.remove(); // Stop monitoring safely
+        subscription.remove(); 
       }
   
       if (count === 0) {
@@ -211,12 +242,11 @@ const BtHomeScreen = () => {
           if (modalVisible) {
             redirectToPhoneApp();
           }
-        }, 60000);        
+        }, 5000);        
       }
   
-      // Send averaged measurement to the backend
       try {
-        const response = await fetch(`https://fce6-178-220-185-182.ngrok-free.app/api/measurements?userId=${auth.currentUser.uid}`, {
+        const response = await fetch(`https://0779-178-220-185-88.ngrok-free.app/api/measurements?userId=${auth.currentUser.uid}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -231,7 +261,7 @@ const BtHomeScreen = () => {
   
         if (response.ok) {
           console.log('Measurement saved successfully');
-          fetchLastMeasurement(); // Refresh the last measurement
+          fetchLastMeasurement();
         } else {
           console.error('Failed to save measurement');
         }
@@ -242,13 +272,92 @@ const BtHomeScreen = () => {
       console.error('Unexpected error:', error);
     } finally {
       setIsMeasuring(false);
-      animateHeart(false); // Stop heart animation
+      animateHeart(false);
     }
-  };    
+  };
+  
+
+  
+  const startTimer = () => {
+    clearInterval(timerInterval); 
+    setTimer(10); 
+    timerInterval = setInterval(() => {
+      setTimer((prev) => {
+        if (prev <= 1) {
+          clearInterval(timerInterval);
+          sendEmergencyMessage(); 
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
+  
+  const clearTimer = () => {
+    clearInterval(timerInterval); 
+    setTimer(10); 
+  };
 
   const redirectToPhoneApp = () => {
     const phoneNumber = `tel:${emergencyNumber}`;
     Linking.openURL(phoneNumber).catch((err) => console.error('Error opening phone app:', err));
+  };
+
+  const fetchLocation = async () => {
+    console.log('Fetching location...');
+    setLocation(null); 
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert('Permission Denied', 'Location permission is required to send your location.');
+        return;
+      }
+  
+      const location = await Location.getCurrentPositionAsync({});
+      console.log('Location fetched:', location.coords);
+      setLocation(location.coords); 
+    } catch (error) {
+      setLocation(null); 
+    }
+  };
+
+  const sendEmergencyMessage = async () => {
+    if (!emergencyNumber) {
+      Alert.alert('Error', 'No emergency contact available.');
+      return;
+    }
+  
+    if (!location) {
+      console.log('Fetching location before sending the message...');
+      await fetchLocation(); 
+    }
+  
+    const message = location
+      ? `I'm not feeling well. My current location is: https://www.google.com/maps?q=${location.latitude},${location.longitude}`
+      : "I'm not feeling well. I couldn't fetch my location.";
+  
+    try {
+      const smsUrl = `sms:${emergencyNumber}?body=${encodeURIComponent(message)}`;
+      Linking.openURL(smsUrl).catch((err) => {
+        console.error('Error opening messaging app:', err);
+        Alert.alert('Error', 'Failed to open messaging app.');
+      });
+    } catch (error) {
+      console.error('Error preparing SMS:', error);
+      Alert.alert('Error', 'Failed to prepare emergency message.');
+    }
+  
+    setModalVisible(false); 
+  };
+
+  const handleYes = () => {
+    clearTimer();
+    setModalVisible(false); 
+  };
+  
+  const handleNo = () => {
+    clearTimer();
+    setModalVisible(false);
+    redirectToPhoneApp(); 
   };
 
   const animateHeart = (shouldAnimate) => {
@@ -290,7 +399,7 @@ const BtHomeScreen = () => {
       try {
         await connectedDevice.cancelConnection();
         console.log("Disconnected from device.");
-        setConnectedDevice(null); // Reset the connected device state
+        setConnectedDevice(null); 
       } catch (error) {
         console.error("Error disconnecting from device:", error);
       }
@@ -302,10 +411,8 @@ const BtHomeScreen = () => {
 
   const handleBluetoothPress = () => {
     if (connectedDevice) {
-      // If connected, disconnect
       handleDisconnect();
     } else {
-      // If not connected, show the Bluetooth modal
       setBluetoothModalVisible(true);
       scanForDevices();
     }
@@ -328,7 +435,6 @@ const BtHomeScreen = () => {
       });
     });
   
-    // Stop scanning after 10 seconds
     setTimeout(() => {
       manager.stopDeviceScan();
     }, 10000);
@@ -341,8 +447,8 @@ const BtHomeScreen = () => {
         await device.discoverAllServicesAndCharacteristics();
         console.log("Connected to device:", device.id);
 
-        setConnectedDevice(device); // Set the connected device state
-        setBluetoothModalVisible(false); // Close the Bluetooth modal
+        setConnectedDevice(device); 
+        setBluetoothModalVisible(false); 
 
         Alert.alert("Success", `Connected to ${device.name || "Device"}`);
     } catch (error) {
@@ -478,10 +584,11 @@ const BtHomeScreen = () => {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalLabel}>Are you feeling well?</Text>
-            <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
+            <Text style={styles.timerText}>Time remaining: {timer}s</Text>
+            <TouchableOpacity style={styles.closeButton} onPress={handleYes}>
               <Text style={styles.buttonText}>Yes</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.closeButton} onPress={redirectToPhoneApp}>
+            <TouchableOpacity style={styles.closeButton} onPress={handleNo}>
               <Text style={styles.buttonText}>No</Text>
             </TouchableOpacity>
           </View>

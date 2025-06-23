@@ -167,50 +167,58 @@ const styles = StyleSheet.create({
     height: 24,
     resizeMode: 'contain',
   },
-  // Modal styles
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
-  },
-  modalContent: {
-    width: '80%',
-    backgroundColor: '#1A1A1A', // Dark gray background for modal
-    padding: 20,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  modalLabel: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#FFF', 
-    marginBottom: 20,
-  },
-  modalButton: {
-    backgroundColor: '#FF6347', 
-    padding: 10,
-    borderRadius: 10,
-    marginVertical: 10,
-    width: '100%', 
-    alignItems: 'flex-start', 
-  },
-  buttonText: {
-    color: '#FFF', 
-    fontSize: 16,
-    fontWeight: 'bold',
-    flexWrap: 'wrap', 
-    textAlign: 'left', 
-  },
-  closeButton: {
-    backgroundColor: '#FF6347', // Tomato red for the close button
-    padding: 10,
-    borderRadius: 10,
-    marginVertical: 10,
-    width: '50%', // Make the button smaller (50% of the modal width)
-    alignItems: 'center', // Center the text inside the button
-    alignSelf: 'center', // Center the button within the modal
-  },
+// Modal styles
+modalContainer: {
+  flex: 1,
+  justifyContent: 'center',
+  alignItems: 'center',
+  backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+},
+modalContent: {
+  width: '80%',
+  backgroundColor: '#1A1A1A', // Dark gray background for modal
+  padding: 20,
+  borderRadius: 10,
+  alignItems: 'center',
+},
+modalLabel: {
+  fontSize: 20,
+  fontWeight: 'bold',
+  color: '#FFF', 
+  marginBottom: 20,
+},
+timerText: {
+  fontSize: 16, // Font size for the timer
+  color: 'white', // White text color
+  marginBottom: 20, // Space below the timer
+  textAlign: 'center', // Center-align the text
+},
+modalButton: {
+  backgroundColor: '#FF6347', // Tomato red for the button
+  paddingVertical: 10, // Adjust vertical padding
+  paddingHorizontal: 20, // Adjust horizontal padding
+  borderRadius: 10, // Rounded corners
+  marginVertical: 10, // Space between buttons
+  alignItems: 'center', // Center the text inside the button
+  alignSelf: 'center', // Center the button within the modal
+  width: '80%', // Adjust button width
+},
+buttonText: {
+  color: '#FFF', // White text color
+  fontSize: 16,
+  fontWeight: 'bold',
+  textAlign: 'center', // Center-align the text
+},
+closeButton: {
+  backgroundColor: '#FF6347', // Tomato red for the close button
+  paddingVertical: 10, // Adjust vertical padding
+  paddingHorizontal: 20, // Adjust horizontal padding
+  borderRadius: 10, // Rounded corners
+  marginVertical: 10, // Space between buttons
+  alignItems: 'center', // Center the text inside the button
+  alignSelf: 'center', // Center the button within the modal
+  width: '80%', // Adjust button width
+},
 });
 
 export default styles;
