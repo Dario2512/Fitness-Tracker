@@ -1,61 +1,90 @@
 #include <Wire.h>
-#include <SparkFun_MAX3010x.h> // Use SparkFun MAX3010x library for MAX30102
-#include <OneWire.h>
-#include <DallasTemperature.h>
+#include <BLEDevice.h>
+#include <BLEServer.h>
+#include <BLEUtils.h>
+#include <BLE2902.h>
 
-// Pin Definitions
-#define ONE_WIRE_BUS 2  // Digital pin for DS18B20 data
+#include <MAX30100_PulseOximeter.h>
+#include <ClosedCube_MAX30205.h>
 
-OneWire oneWire(ONE_WIRE_BUS);
-DallasTemperature sensors(&oneWire);
+#define SERVICE_UUID        "0000ffe0-0000-1000-8000-00805f9b34fb"
+#define CHARACTERISTIC_UUID "0000ffe1-0000-1000-8000-00805f9b34fb"
 
-// MAX30102 Sensor
-MAX30105 max30102;
+PulseOximeter pox;
+ClosedCube_MAX30205 tempSensor;
+BLECharacteristic *pCharacteristic;
+bool deviceConnected = false;
 
-// DS18B20 Sensor
-#define MAX30102_I2C_ADDRESS 0x57
+unsigned long lastUpdate = 0;
+
+class MyServerCallbacks: public BLEServerCallbacks {
+  void onConnect(BLEServer* pServer) {
+    deviceConnected = true;
+  }
+
+  void onDisconnect(BLEServer* pServer) {
+    deviceConnected = false;
+  }
+};
 
 void setup() {
   Serial.begin(115200);
+  Wire.begin();
 
-  // Initialize MAX30102 Sensor
-  if (!max30102.begin()) {
-    Serial.println("Could not find a valid MAX30102 sensor, check wiring!");
-    while (1);
+  // Setup MAX30205 (temperature sensor)
+  tempSensor.begin(0x48);
+
+  // Setup MAX30100 (heart rate + SpO2)
+  if (!pox.begin()) {
+    Serial.println("MAX30100 init failed. Check wiring!");
+    while (1); // Stop here if sensor not found
   }
-  
-  max30102.setup();  // Initialize MAX30102 for heart rate and SpO2
-  
-  // Initialize DS18B20
-  sensors.begin();
-  
-  Serial.println("Initialization complete.");
+
+  // Optional: Set callback on heartbeat
+  pox.setOnBeatDetectedCallback([]() {
+    Serial.println("Beat!");
+  });
+
+  // BLE setup
+  BLEDevice::init("Trackario");
+  BLEServer *pServer = BLEDevice::createServer();
+  pServer->setCallbacks(new MyServerCallbacks());
+
+  BLEService *pService = pServer->createService(SERVICE_UUID);
+
+  pCharacteristic = pService->createCharacteristic(
+                      CHARACTERISTIC_UUID,
+                      BLECharacteristic::PROPERTY_READ |
+                      BLECharacteristic::PROPERTY_NOTIFY
+                    );
+
+  pCharacteristic->addDescriptor(new BLE2902());
+
+  pService->start();
+  BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();
+  pAdvertising->addServiceUUID(SERVICE_UUID);
+  pAdvertising->start();
+
+  Serial.println("Waiting for a client connection...");
 }
 
 void loop() {
-  // Read Heart Rate and SpO2 from MAX30102
-  long irValue = max30102.getIR();  // Read the IR value (infrared) from the sensor
+  // Required for MAX30100 to process samples
+  pox.update();
 
-  if (irValue < 50000) {
-    Serial.println("No finger detected!");
-  } else {
-    float heartRate = max30102.getHeartRate();
-    float oxygenLevel = max30102.getSpO2();
-    
-    Serial.print("Heart Rate: ");
-    Serial.print(heartRate);
-    Serial.print(" bpm, SpO2: ");
-    Serial.print(oxygenLevel);
-    Serial.println(" %");
+  // Send once per second
+  if (deviceConnected && millis() - lastUpdate > 1000) {
+    lastUpdate = millis();
+
+    float bpm = pox.getHeartRate();
+    uint8_t spo2 = pox.getSpO2();
+    float temp = tempSensor.readTemperature();
+
+    // Send as string: "bpm,spo2,temp"
+    String data = String(bpm, 1) + "," + String(spo2) + "," + String(temp, 1);
+    pCharacteristic->setValue(data.c_str());
+    pCharacteristic->notify();
+
+    Serial.println("Sent: " + data);
   }
-  
-  // Read temperature from DS18B20
-  sensors.requestTemperatures();
-  float temperature = sensors.getTempCByIndex(0);  // Get the temperature in Celsius
-  
-  Serial.print("Temperature: ");
-  Serial.print(temperature);
-  Serial.println(" C");
-  
-  delay(1000);  // Delay 1 second before next read
 }

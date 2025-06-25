@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, TextInput, Text, StyleSheet, ActivityIndicator, FlatList, TouchableOpacity } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
-import { fetchNearbyPlaces, fetchAutocompleteSuggestions } from '../backend/apiService';
+import { fetchNearbyPlaces, fetchAutocompleteSuggestions } from '../backend/mapsApiService';
 import { FAB, Portal, Provider } from 'react-native-paper';
 import styles from './styles/stylesMaps';
 import axios from 'axios';
@@ -32,7 +32,6 @@ const MapsScreen: React.FC = () => {
           return;
         }
 
-        // Subscribe to location changes
         locationSubscription = await Location.watchPositionAsync(
           {
             accuracy: Location.Accuracy.High,

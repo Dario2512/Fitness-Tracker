@@ -1,50 +1,90 @@
-# Welcome to your Expo app 👋
+# Fitness Tracker (Trackario)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A complete health monitoring app: track vital signs via Bluetooth, count steps, monitor calories, and send emergency messages with your location.
 
-## Get started
+---
 
-1. Install dependencies
+## What does the app do?
 
-   ```bash
-   npm install
-   ```
+- **Vital Measurements:** Receives heart rate, SpO2, and temperature from an ESP32 device via Bluetooth.
+- **Step Counter:** Counts your daily and weekly steps using your phone’s sensors.
+- **Calories:** Calculates and tracks calories burned and food intake.
+- **Emergency Function:** Sends a pre-filled SMS with your location to an emergency contact if you don’t respond to a health alert.
+- **History:** View your measurement and step history.
+- **Maps:** View current location and relevant destinations in your surrounding (Hospitals, Gyms and Stadiums)
+- **User Authentication:** Uses Firebase for user management and data storage.
 
-2. Start the app
+---
 
-   ```bash
-    npx expo start
-   ```
+## Project Structure
 
-In the output, you'll find options to open the app in a
+- `/screens` – React Native/Expo screens and UI components
+- `/screens/styles` – Style files for each screen
+- `/backend` – Node.js/Express backend (REST API, Firebase)
+- `/Licenta Arduino` – Arduino code for the Bluetooth sensor
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+---
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Quick Start Guide
 
-## Get a fresh project
+### 1. Prerequisites
 
-When you're ready, run:
+- [Node.js](https://nodejs.org/) (v16+ recommended)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
+- [Expo CLI](https://docs.expo.dev/get-started/installation/):  
+  ```bash
+  npm install -g expo-cli
+- Ngrok (for exposing your backend to the internet)
+- Android Studio (for emulator, optional)
+- Physical Android device (required for sensors: Bluetooth, pedometer, etc.)
+- Firebase project setup
+- .env file(root directory) with Google Maps API
 
-```bash
-npm run reset-project
-```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### 2. Install dependencies
+Project root:
+- npm install or npm install --legacy-peer-deps
+cd backend:
+- npm install
 
-## Learn more
+### 3. Backend setup
+- Place your Firebase service account key (firebase-adminsdk.json) in backend/firebase/.
+- Place your firebaseConfig.js in backend/firebase/
 
-To learn more about developing your project with Expo, look at the following resources:
+Start the backend server:
+- cd backend
+- node server.js
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### 4. Expose backend with Ngrok (optional) or use localhost(local ip)
+- ngrok http 3000
+- Copy the generated Ngrok URL (e.g., https://****.ngrok-free.app) and use it in your frontend fetch requests (in /screens files)
 
-## Join the community
+### 5. Frontend setup & running
+- Make sure all backend URLs are correct in your frontend code
+- Start expo: npm start 
+- Scan the QR code with the Expo Go app 
+- or
+- run on a physical device: eas build --platform android --profile development 
+- (make sure you have expo account)
 
-Join our community of developers creating universal apps.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+### 6. ESP32 physical device
+- Open /Licenta Arduino/Licenta.ino in Arduino IDE.
+Select the correct board and port(ESP32 Dev module).
+Upload the sketch to your ESP32 device.
+
+### 7. Permissions Required
+- Bluetooth (for vital measurements)
+- Location (for emergency location sharing and Maps screen)
+- Activity Recognition (for step counting)
+
+### 8. Troubleshooting
+
+Frontend-backend connection issues:
+- Make sure Ngrok is running and the URL is correct in your frontend code.
+
+Firebase errors:
+- Check your service account key and Firestore permissions.
+
+Bluetooth not working:
+- Check permissions and hardware connections.

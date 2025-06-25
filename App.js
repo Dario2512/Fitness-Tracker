@@ -5,10 +5,9 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { auth, db } from './backend/firebase/firebaseConfig';  // Ensure correct import of Firebase config
+import { auth, db } from './backend/firebase/firebaseConfig';
 import CaloriesScreen from './screens/CaloriesScreen';
 import EmergencyNumberScreen from './screens/EmergencyNumberScreen';
-import HomeScreen from './screens/HomeScreen';
 import MapsScreen from './screens/MapsScreen';
 import PasswordChangeScreen from './screens/PasswordChangeScreen';
 import SettingsScreen from './screens/SettingsScreen';
