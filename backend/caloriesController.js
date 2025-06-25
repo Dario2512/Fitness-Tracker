@@ -1,7 +1,6 @@
 const admin = require('firebase-admin');
 const { getFirestore, Timestamp } = require('firebase-admin/firestore');
 
-// Import the service account credentials (make sure to point to the correct path)
 const firebaseConfig = require('./firebase/firebase-adminsdk.json');
 
 // Initialize the Firebase Admin SDK with service account credentials
@@ -10,7 +9,7 @@ if (admin.apps.length === 0) {
     credential: admin.credential.cert(firebaseConfig),
   });
 } else {
-  admin.app(); // Use the existing app if already initialized
+  admin.app(); // Use the existing app if already init
 }
 
 const db = getFirestore();
@@ -89,7 +88,7 @@ exports.incrementFoodCalories = async (req, res) => {
   }
 };
 
-// Get the last 7 days' calories burned
+// Get the last 7 day calories burned
 exports.getWeeklyCalories = async (req, res) => {
   const { userId } = req.query;
 
@@ -113,9 +112,8 @@ exports.getWeeklyCalories = async (req, res) => {
       const data = doc.data();
       
       // Convert Firestore Timestamp to JavaScript Date and format it to ISO string
-      const formattedDate = data.date.toDate().toISOString(); // Convert to ISO string
+      const formattedDate = data.date.toDate().toISOString();
       
-      // Push the formatted date and other data
       weeklyCalories.push({ date: formattedDate, ...data });
     });
 

@@ -40,12 +40,12 @@ const SignInScreen = ({ navigation }) => {
 
   return (
     <View style={stylesSign.container}>
-      {/* Add the app logo */}
+      {/* app logo */}
       <Image
         source={require('./images/SignLogo.png')}
         style={stylesSign.logo}
       />
-      {/* Add the app name */}
+      {/* app name */}
       <Text style={stylesSign.appName}>Life Tracker</Text>
 
       <TextInput

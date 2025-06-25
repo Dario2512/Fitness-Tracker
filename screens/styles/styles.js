@@ -4,7 +4,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#121212', // Black background for the whole screen
+    backgroundColor: '#121212', 
   },
   // Logout button styling
   logoutButton: {
@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   logoutText: {
-    color: '#FF4D4D', // Red logout button text
+    color: '#FF4D4D', 
     fontSize: 16,
     fontWeight: 'bold',
   },
@@ -22,27 +22,27 @@ const styles = StyleSheet.create({
   appNameContainer: {
     alignItems: 'center',
     marginTop: 50,
-    padding: 20 // Push down a little from the top
+    padding: 20 
   },
   appName: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#FFF', // White text for app name
+    color: '#FFF', 
   },
   header: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#FFF', // White text for header
+    color: '#FFF', 
     textAlign: 'start',
     marginTop: 0,
     marginBottom: 20,
   },
   lastMeasurement: {
-    backgroundColor: '#1A1A1A', // Dark gray background for last measurement
+    backgroundColor: '#1A1A1A', 
     padding: 10,
     borderRadius: 10,
     marginBottom: 50,
-    elevation: 5, // Shadow for better visibility
+    elevation: 5, 
   },
   lastMeasurementHeader: {
     flexDirection: 'row',
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
   },
   noMeasurementText: {
     fontSize: 16,
-    color: '#888', // Light gray text
+    color: '#888', 
     textAlign: 'center',
     paddingHorizontal: 20,
   },
@@ -67,14 +67,14 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   historyButtonText: {
-    color: '#FF4D4D', // Red text for history button
+    color: '#FF4D4D', 
     fontWeight: 'bold',
     fontSize: 16,
   },
   measurementText: {
-    fontSize: 20, // Increase the font size
-    color: '#FFF', // White text color
-    marginBottom: 10, // Add some space between measurements
+    fontSize: 20, 
+    color: '#FFF', 
+    marginBottom: 10, 
   },
   measureButtonContainer: {
     flexDirection: 'row',
@@ -114,33 +114,33 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   heartIcon: {
-    width: 150,  // Adjust the size as needed
+    width: 150,  
     height: 150,
-    resizeMode: 'contain',  // Ensure the image scales correctly
+    resizeMode: 'contain',  
   },
   buttonContainer: {
     position: 'absolute',
-    bottom: 0, // Align it to the bottom
+    bottom: 0, 
     left: 0,
     right: 0,
     flexDirection: 'row',
     justifyContent: 'space-around',
     padding: 15,
     paddingBottom: 30,
-    backgroundColor: '#1A1A1A', // Dark gray background for buttons
+    backgroundColor: '#1A1A1A', 
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
   },
   navButton: {
     padding: 10,
-    backgroundColor: '#FF6347', // Tomato red for navigation buttons
+    backgroundColor: '#FF6347', 
     borderRadius: 10,
     alignItems: 'center',
     width: '30%',
   },
   navButtonText: {
     fontSize: 16,
-    color: '#FFF', // White text
+    color: '#FFF', 
     fontWeight: 'bold',
     textAlign: 'center',
   },
@@ -160,10 +160,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 45,
     right: 10,
-    padding: 5, // Adjust padding to make it smaller
+    padding: 5, 
   },
   settingsIcon: {
-    width: 24,  // Smaller size for the gear icon
+    width: 24,  
     height: 24,
     resizeMode: 'contain',
   },
@@ -172,11 +172,11 @@ modalContainer: {
   flex: 1,
   justifyContent: 'center',
   alignItems: 'center',
-  backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+  backgroundColor: 'rgba(0, 0, 0, 0.5)', 
 },
 modalContent: {
   width: '80%',
-  backgroundColor: '#1A1A1A', // Dark gray background for modal
+  backgroundColor: '#1A1A1A', 
   padding: 20,
   borderRadius: 10,
   alignItems: 'center',
@@ -188,36 +188,36 @@ modalLabel: {
   marginBottom: 20,
 },
 timerText: {
-  fontSize: 16, // Font size for the timer
-  color: 'white', // White text color
-  marginBottom: 20, // Space below the timer
-  textAlign: 'center', // Center-align the text
+  fontSize: 16, 
+  color: 'white', 
+  marginBottom: 20, 
+  textAlign: 'center', 
 },
 modalButton: {
-  backgroundColor: '#FF6347', // Tomato red for the button
-  paddingVertical: 10, // Adjust vertical padding
-  paddingHorizontal: 20, // Adjust horizontal padding
-  borderRadius: 10, // Rounded corners
-  marginVertical: 10, // Space between buttons
-  alignItems: 'center', // Center the text inside the button
-  alignSelf: 'center', // Center the button within the modal
-  width: '80%', // Adjust button width
+  backgroundColor: '#FF6347', 
+  paddingVertical: 10, 
+  paddingHorizontal: 20, 
+  borderRadius: 10, 
+  marginVertical: 10, 
+  alignItems: 'center', 
+  alignSelf: 'center', 
+  width: '80%', 
 },
 buttonText: {
-  color: '#FFF', // White text color
+  color: '#FFF', 
   fontSize: 16,
   fontWeight: 'bold',
-  textAlign: 'center', // Center-align the text
+  textAlign: 'center', 
 },
 closeButton: {
-  backgroundColor: '#FF6347', // Tomato red for the close button
-  paddingVertical: 10, // Adjust vertical padding
-  paddingHorizontal: 20, // Adjust horizontal padding
-  borderRadius: 10, // Rounded corners
-  marginVertical: 10, // Space between buttons
-  alignItems: 'center', // Center the text inside the button
-  alignSelf: 'center', // Center the button within the modal
-  width: '80%', // Adjust button width
+  backgroundColor: '#FF6347', 
+  paddingVertical: 10, 
+  paddingHorizontal: 20, 
+  borderRadius: 10, 
+  marginVertical: 10, 
+  alignItems: 'center', 
+  alignSelf: 'center', 
+  width: '80%', 
 },
 });
 

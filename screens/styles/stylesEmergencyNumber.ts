@@ -3,80 +3,80 @@ import { StyleSheet } from 'react-native';
 export default StyleSheet.create({
   container: {
     flex: 1,
-    padding: 30, // Increased padding for better spacing
-    backgroundColor: '#121212', // Dark background
-    justifyContent: 'center', // Center content vertically
-    alignItems: 'center', // Center content horizontally
+    padding: 30, 
+    backgroundColor: '#121212', 
+    justifyContent: 'center',
+    alignItems: 'center', 
   },
   label: {
-    fontSize: 28, // Larger font size for the label
+    fontSize: 28, 
     fontWeight: 'bold',
     color: 'white',
-    marginBottom: 30, // Add more spacing below the label
+    marginBottom: 30, 
     textAlign: 'center',
   },
   emergencyName: {
-    fontSize: 22, // Larger font size for emergency name
+    fontSize: 22, 
     color: 'white',
     marginBottom: 15,
-    textAlign: 'center', // Center-align text
+    textAlign: 'center', 
   },
   emergencyNumber: {
-    fontSize: 22, // Larger font size for emergency number
+    fontSize: 22, 
     color: 'white',
-    marginBottom: 40, // Add more spacing below the emergency number
-    textAlign: 'center', // Center-align text
+    marginBottom: 40, 
+    textAlign: 'center', 
   },
   button: {
     backgroundColor: 'tomato',
-    paddingVertical: 8, // Reduced vertical padding
-    paddingHorizontal: 20, // Reduced horizontal padding
-    borderRadius: 8, // Slightly smaller border radius
-    alignSelf: 'center', // Center the button horizontally
+    paddingVertical: 8, 
+    paddingHorizontal: 20, 
+    borderRadius: 8, 
+    alignSelf: 'center', 
   },
   buttonText: {
     color: 'white',
-    fontSize: 16, // Slightly smaller font size for button text
+    fontSize: 16, 
     textAlign: 'center',
   },
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
   },
   modalContent: {
-    width: '90%', // Increased width for modal content
-    backgroundColor: '#1e1e1e', // Dark gray background for modal
-    padding: 30, // Increased padding for modal content
-    borderRadius: 15, // Slightly larger border radius
+    width: '90%', 
+    backgroundColor: '#1e1e1e', 
+    padding: 30, 
+    borderRadius: 15, 
     alignItems: 'center',
   },
   modalLabel: {
-    fontSize: 22, // Larger font size for modal label
+    fontSize: 22, 
     color: 'white',
     marginBottom: 20,
     textAlign: 'center',
   },
   input: {
-    height: 50, // Increased height for input
-    borderColor: '#FF6347', // Tomato red border
+    height: 50, 
+    borderColor: '#FF6347', 
     borderWidth: 1,
-    paddingHorizontal: 15, // Increased horizontal padding
-    marginBottom: 25, // Increased spacing between inputs
-    borderRadius: 8, // Slightly larger border radius
-    backgroundColor: '#2C2C2C', // Dark background for input
-    color: 'white', // White text for input
-    fontSize: 18, // Larger font size for input text
+    paddingHorizontal: 15, 
+    marginBottom: 25, 
+    borderRadius: 8, 
+    backgroundColor: '#2C2C2C', 
+    color: 'white', 
+    fontSize: 18, 
     width: '100%',
   },
   modalButton: {
     backgroundColor: 'tomato',
-    paddingVertical: 8, // Reduced vertical padding
-    paddingHorizontal: 20, // Reduced horizontal padding
-    borderRadius: 8, // Slightly smaller border radius
+    paddingVertical: 8, 
+    paddingHorizontal: 20, 
+    borderRadius: 8, 
     alignItems: 'center',
-    marginTop: 10, // Reduced spacing between buttons
+    marginTop: 10, 
     width: '100%',
   },
 });

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert, Image } from 'react-native';
 import { doc, setDoc, getFirestore } from 'firebase/firestore';
 import { auth } from '../backend/firebase/firebaseConfig';
-import stylesSign from './styles/stylesSign'; // Reuse styles from SignIn and SignUp screens
+import stylesSign from './styles/stylesSign';
 
 const SetUserDetailsScreen = ({ navigation }) => {
   const [userData, setUserData] = useState({
@@ -33,7 +33,7 @@ const SetUserDetailsScreen = ({ navigation }) => {
       await setDoc(doc(db, 'users', userId), updatedData, { merge: true }); // Merge with existing data
 
       Alert.alert('Success', 'Your details have been saved.');
-      navigation.navigate('Home'); // Redirect to Home Screen
+      navigation.navigate('Home');
     } catch (error) {
       console.error('Error saving user details:', error);
       Alert.alert('Error', 'Failed to save your details. Please try again.');

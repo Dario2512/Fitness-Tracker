@@ -12,7 +12,6 @@ const db = admin.firestore();
 
 exports.handleMeasurement = async (req, res) => {
   try {
-    // Log the request body for debugging
     console.log('Received request body:', req.body);
     
     const { userId, heartRate, spO2, temperature } = req.body;
@@ -38,7 +37,7 @@ exports.handleMeasurement = async (req, res) => {
   }
 };
 
-// Function to fetch the last measurement (GET)
+// Function to fetch the last measurement
 exports.getLastMeasurement = async (req, res) => {
   try {
     const { userId } = req.query;

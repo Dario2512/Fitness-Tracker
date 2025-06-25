@@ -3,39 +3,39 @@ import { StyleSheet } from 'react-native';
 const stylesUser = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#121212', // Dark background
+    backgroundColor: '#121212', 
     padding: 20,
-    justifyContent: 'center', // Center content vertically
-    alignItems: 'center', // Center content horizontally
+    justifyContent: 'center', 
+    alignItems: 'center', 
   },
   header: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#FFF', // White text for header
+    color: '#FFF', 
     textAlign: 'center',
-    marginBottom: 50, // Add more spacing below the header
+    marginBottom: 50, 
   },
   userInfo: {
     marginBottom: 30,
-    alignItems: 'center', // Center user info text
+    alignItems: 'center', 
   },
   userInfoText: {
     fontSize: 18,
-    color: '#FFF', // White text for user data
+    color: '#FFF', 
     marginBottom: 10,
-    textAlign: 'center', // Center-align text
+    textAlign: 'center', 
   },
   input: {
-    backgroundColor: '#2C2C2C', // Dark background for input
+    backgroundColor: '#2C2C2C', 
     borderWidth: 1,
-    borderColor: '#FF6347', // Tomato red border
+    borderColor: '#FF6347', 
     borderRadius: 5,
     padding: 10,
-    width: '80%', // Increase width for better usability
+    width: '80%', 
     marginBottom: 15,
-    color: '#FFF', // White text for input
+    color: '#FFF', 
     fontSize: 16,
-    textAlign: 'center', // Center-align input text
+    textAlign: 'center', 
   },
   errorText: {
     color: 'red',
@@ -47,38 +47,38 @@ const stylesUser = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#1A1A1A', // Dark gray background for modal
+    backgroundColor: '#1A1A1A', 
   },
   button: {
-    backgroundColor: '#FF6347', // Tomato red for buttons
+    backgroundColor: '#FF6347', 
     padding: 12,
-    width: '80%', // Make buttons consistent with input width
+    width: '80%', 
     textAlign: 'center',
     marginTop: 15,
     borderRadius: 5,
     fontSize: 18,
-    alignItems: 'center', // Center button text
+    alignItems: 'center', 
   },
   buttonCancel: {
-    backgroundColor: '#555', // Darker shade for cancel button
+    backgroundColor: '#555', 
     padding: 12,
-    width: '80%', // Make buttons consistent with input width
+    width: '80%', 
     textAlign: 'center',
     marginTop: 10,
     borderRadius: 5,
     fontSize: 18,
-    alignItems: 'center', // Center button text
+    alignItems: 'center', 
   },
   editButton: {
-    backgroundColor: '#FF6347', // Red color for the Edit button
-    paddingVertical: 8, // Adjust vertical padding
-    paddingHorizontal: 20, // Adjust horizontal padding to wrap around text
+    backgroundColor: '#FF6347', 
+    paddingVertical: 8, 
+    paddingHorizontal: 20, 
     borderRadius: 5,
     marginTop: 20,
-    alignSelf: 'center', // Center the button horizontally
+    alignSelf: 'center', 
   },
   editButtonText: {
-    color: '#FFF', // White text for the button
+    color: '#FFF', 
     fontSize: 16,
     textAlign: 'center',
   },

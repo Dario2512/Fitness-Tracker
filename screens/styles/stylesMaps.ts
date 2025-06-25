@@ -14,13 +14,13 @@ export default StyleSheet.create({
     borderWidth: 1,
     paddingHorizontal: 10,
     margin: 10,
-    borderRadius: 15, // Make the search bar more rounded
-    backgroundColor: 'gray', // Set the background color to gray
-    color: 'white', // Set the text color to white
+    borderRadius: 15, 
+    backgroundColor: 'gray', 
+    color: 'white', 
   },
   suggestionsList: {
     maxHeight: 200,
-    backgroundColor: 'gray', // Set the background color to gray
+    backgroundColor: 'gray', 
     borderColor: 'gray',
     borderWidth: 1,
     marginHorizontal: 10,
@@ -28,9 +28,9 @@ export default StyleSheet.create({
   },
   suggestionItem: {
     padding: 10,
-    borderBottomColor: 'white', // Set the border bottom color to white
+    borderBottomColor: 'white', 
     borderBottomWidth: 1,
-    color: 'white', // Set the text color to white
+    color: 'white', 
   },
   loadingContainer: {
     flex: 1,
@@ -47,9 +47,9 @@ export default StyleSheet.create({
     bottom: 16,
   },
   fabIcon: {
-    color: 'red', // Set the icon color to red
+    color: 'red', 
   },
   fabBackdrop: {
-    backgroundColor: 'transparent', // Set the backdrop color to transparent
+    backgroundColor: 'transparent', 
   },
 });

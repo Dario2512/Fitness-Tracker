@@ -14,41 +14,41 @@ const stylesSign = StyleSheet.create({
     marginBottom: 10, 
   },
   appName: {
-    fontSize: 28, // Font size for the app name
-    fontWeight: 'bold', // Bold text
-    textAlign: 'center', // Center the text
-    color: '#fff', // White color for the app name
-    marginBottom: 40, // Add spacing below the app name
+    fontSize: 28, 
+    fontWeight: 'bold', 
+    textAlign: 'center', 
+    color: '#fff', 
+    marginBottom: 40,
   },
   header: {
     fontSize: 20,
     marginBottom: 40,
     textAlign: 'center',
-    color: '#fff', // White color for the header text
+    color: '#fff', 
   },
   input: {
-    borderColor: '#ccc', // Light gray border for input fields
+    borderColor: '#ccc', 
     borderWidth: 1,
     padding: 12,
     marginBottom: 10,
     borderRadius: 8,
-    backgroundColor: '#333', // Dark background for input fields
-    color: '#fff', // White text color for input fields
+    backgroundColor: '#333', 
+    color: '#fff', 
   },
   errorText: {
-    color: 'red', // Red color for error messages
+    color: 'red', 
     marginBottom: 10,
     textAlign: 'center',
   },
   button: {
     marginBottom: 0,
     marginTop:20,
-    backgroundColor: '#FF6347', // Red background color for buttons (matching red theme)
+    backgroundColor: '#FF6347', 
     paddingVertical: 10,
     borderRadius: 5,
   },
   buttonText: {
-    color: '#fff', // White text color for buttons
+    color: '#fff', 
     textAlign: 'center',
     fontSize: 16,
   },

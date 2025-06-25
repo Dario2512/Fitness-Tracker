@@ -19,7 +19,7 @@ const StatsScreen = () => {
         return;
       }
 
-      // Query the user's measurements, ordered by timestamp in descending order
+      // measurements ordered by timestamp in descending order
       const measurementsRef = collection(db, `users/${userId}/measurements`);
       const q = query(measurementsRef, orderBy('timestamp', 'desc'));
 
@@ -143,7 +143,7 @@ const StatsScreen = () => {
                 },
               ],
             }}
-            width={Dimensions.get('window').width} // Full width of the screen
+            width={Dimensions.get('window').width} 
             height={Dimensions.get('window').height / 4}
             chartConfig={{
               backgroundColor: '#1A1A1A',

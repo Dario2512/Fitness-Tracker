@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Constants from 'expo-constants';
 
-const MAPS_API_KEY = Constants.expoConfig?.extra?.mapsApiKey; // Fetch API Key
+const MAPS_API_KEY = Constants.expoConfig?.extra?.mapsApiKey; 
 
 interface Prediction {
   description: string;
