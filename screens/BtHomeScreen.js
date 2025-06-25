@@ -23,7 +23,7 @@ const BtHomeScreen = () => {
   const [heartAnimation] = useState(new Animated.Value(1)); 
   const [name, setname] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
-  const [timer, setTimer] = useState(10);
+  const [timer, setTimer] = useState(60);
   const [location, setLocation] = useState(null);
   const [emergencyNumber, setEmergencyNumber] = useState('');
   const [emergencyName, setEmergencyName] = useState('');
@@ -234,7 +234,7 @@ const BtHomeScreen = () => {
   
       // Check for abnormal values
       if (averageHeartRate < 50 || averageHeartRate > 150 || 
-          averageSpO2 < 92 || averageTemperature < 35.1 || 
+          averageSpO2 < 90 || averageTemperature < 35.1 || 
           averageTemperature > 37.5) {
         setModalVisible(true);
   
@@ -280,7 +280,7 @@ const BtHomeScreen = () => {
   
   const startTimer = () => {
     clearInterval(timerInterval); 
-    setTimer(10); 
+    setTimer(60); 
     timerInterval = setInterval(() => {
       setTimer((prev) => {
         if (prev <= 1) {
@@ -294,7 +294,7 @@ const BtHomeScreen = () => {
   
   const clearTimer = () => {
     clearInterval(timerInterval); 
-    setTimer(10); 
+    setTimer(60); 
   };
 
   const redirectToPhoneApp = () => {
