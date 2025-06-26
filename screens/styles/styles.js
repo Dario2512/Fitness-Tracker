@@ -180,6 +180,7 @@ modalContent: {
   padding: 20,
   borderRadius: 10,
   alignItems: 'center',
+  maxHeight: '80%',
 },
 modalLabel: {
   fontSize: 20,
@@ -219,6 +220,14 @@ closeButton: {
   alignSelf: 'center', 
   width: '80%', 
 },
+
+emergencyReasonText: {
+  color: '#FFF',
+  fontSize: 16,
+  textAlign: 'center',    
+  marginBottom: 20,              
+},
+
 });
 
 export default styles;
