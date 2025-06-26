@@ -6,7 +6,6 @@ import { formatDate } from '../utils/formatDate';
 import styles from './styles/stylesSteps';
 import Constants from "expo-constants";
 
-//const NGROK_URL = Constants.expoConfig?.extra?.NGROK_URL;
 
 const StepCounterScreen: React.FC = () => {
   const [currentSteps, setCurrentSteps] = useState(0); // Steps counted in the current session
@@ -91,7 +90,7 @@ const StepCounterScreen: React.FC = () => {
         const response = await fetch(`https://fce6-178-220-185-182.ngrok-free.app/api/steps/weekly?userId=${userId}`);
         if (response.ok) {
           const data: { id: string; date: string; steps: number; caloriesBurned?: number }[] = await response.json(); // Explicitly type the data array
-          const todaySteps = data.find((step) => step.date === today); // TypeScript now knows the type of 'step'
+          const todaySteps = data.find((step) => step.date === today);
           setHistoricalSteps(todaySteps?.steps || 0); // Initialize historical steps
         } else {
           Alert.alert('Error', 'Failed to fetch historical steps');

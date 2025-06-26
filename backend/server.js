@@ -7,10 +7,9 @@ const stepsRouter = require('./stepsController');
 
 const app = express();
 
-// Enable CORS for all origins
 app.use(cors());  // This will allow requests from all domains
 
-// Use bodyParser to parse JSON requests
+// parse JSON requests
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => {

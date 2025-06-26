@@ -8,7 +8,7 @@ const getWeeklySteps = async (userId) => {
     const last7Days = [];
     for (let i = 0; i < 7; i++) {
       const date = new Date(today);
-      date.setDate(today.getDate() - i); // Subtract i days
+      date.setDate(today.getDate() - i);
       const formattedDate = date.toISOString().split('T')[0]; // Format as YYYY-MM-DD
       last7Days.push(formattedDate);
     }
@@ -59,7 +59,7 @@ const updateSteps = async (userId, steps, date) => {
 };
 
 const calculateCaloriesBurned = (steps, weight, height, age) => {
-  // Simplified formula to calculate calories burned
+  // formula to calculate calories burned
   const MET = 0.035; // Metabolic Equivalent of Task for walking
   const caloriesPerStep = (MET * weight * 3.5) / 200;
   return steps * caloriesPerStep;

@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Button, FlatList, Modal, Text, TextInput, View } from 'react-native';
 import { TouchableOpacity } from 'react-native';
-import { auth } from '../backend/firebase/firebaseConfig'; // Firebase auth
-import styles from './styles/stylesCalories'; // Import modal styles
+import { auth } from '../backend/firebase/firebaseConfig'; 
+import styles from './styles/stylesCalories';
 import Constants from "expo-constants";
 
-//const NGROK_URL = Constants.expoConfig?.extra?.NGROK_URL;
 
 interface CalorieEntry {
-  date: any; // Allow any type for date to handle both string and Firestore Timestamp
+  date: any; // Can be a string or Firestore Timestamp
   calories: number;
   foodName?: string;
   foodWeight?: string;
@@ -142,17 +141,14 @@ const CaloriesScreen = () => {
     let dateObj: Date;
   
     if (typeof date === 'string') {
-      // If it's an ISO string
       dateObj = new Date(date);
     } else if (date && date._seconds !== undefined && date._nanoseconds !== undefined) {
-      // If it's a Firestore Timestamp
-      dateObj = new Date(date._seconds * 1000); // Timestamp is in seconds
+      dateObj = new Date(date._seconds * 1000); 
     } else {
-      // If it's already a valid Date object
       dateObj = new Date(date);
     }
   
-    return dateObj.toLocaleDateString(); // e.g., "12/17/2024"
+    return dateObj.toLocaleDateString();
   };
 
   // Render each day's calories

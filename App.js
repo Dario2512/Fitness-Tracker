@@ -31,9 +31,9 @@ export default function App() {
     if (auth.currentUser) {
       try {
         await auth.currentUser.getIdToken(true); // Force token refresh
-        console.log('🔥 Firebase token refreshed successfully.');
+        console.log(' Firebase token refreshed successfully.');
       } catch (error) {
-        console.error('❌ Error refreshing Firebase token:', error);
+        console.error(' Error refreshing Firebase token:', error);
       }
     }
   };
@@ -53,20 +53,20 @@ export default function App() {
           email: user.email,
           createdAt: new Date(),
         });
-        console.log('✅ User document created in Firestore.');
+        console.log(' User document created in Firestore.');
       } else {
-        //console.log('📌 User Data:', userSnap.data()); 
+        //console.log(' User Data:', userSnap.data()); 
         setUserData(userSnap.data());
       }
     } catch (error) {
-      console.error('❌ Error fetching user data:', error);
+      console.error(' Error fetching user data:', error);
     }
   };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        console.log('✅ User is authenticated:', user.uid);
+        console.log(' User is authenticated:', user.uid);
 
         await refreshToken(); // Refresh token immediately
         await fetchUserData(user); // Fetch user data
@@ -84,7 +84,7 @@ export default function App() {
           await AsyncStorage.setItem('lastActive', currentTime.toString());
         }
       } else {
-        console.log('⚠️ User is not authenticated');
+        console.log(' User is not authenticated');
         setUser(null);
       }
 

@@ -112,7 +112,7 @@ const MapsScreen: React.FC = () => {
         <TextInput
           style={styles.searchInput}
           placeholder="Search for places"
-          placeholderTextColor="white" // Set the placeholder text color to white
+          placeholderTextColor="white"
           value={searchQuery}
           onChangeText={handleSearch}
         />
@@ -180,13 +180,12 @@ const MapsScreen: React.FC = () => {
             onStateChange={({ open }) => setOpen(open)}
             onPress={() => {
               if (open) {
-                // Do something if the speed dial is open
               }
             }}
-            style={styles.fab} // Apply the custom style
-            fabStyle={{ backgroundColor: '#121212' }} // Set the main FAB button background color to gray
-            color="#FF6347" // Set the icon color to red
-            backdropColor="transparent" // Set the backdrop color to transparent
+            style={styles.fab} 
+            fabStyle={{ backgroundColor: '#121212' }} 
+            color="#FF6347" 
+            backdropColor="transparent" 
           />
         </Portal>
       </View>

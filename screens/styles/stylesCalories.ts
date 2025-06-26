@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
-    color: '#fff', // White text for today's calories
+    color: '#fff', 
   },
   card: {
     backgroundColor: '#1A1A1A',
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   },
   cardText: {
     fontSize: 16,
-    color: '#ffffff', // Dark text for card items
+    color: '#ffffff', 
   },
   input: {
     height: 40,
@@ -39,14 +39,14 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingLeft: 8,
     borderRadius: 5,
-    backgroundColor: '#fff', // White background for input fields
+    backgroundColor: '#fff', 
   },
   // Modal styles
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#1e1e1e', // Dark background with transparency for modal
+    backgroundColor: '#1e1e1e', 
     padding: 20,
   },
   modalContent: {
@@ -89,13 +89,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   cancelButton: {
-    marginTop: 15, // Add spacing between Save and Cancel buttons
-    backgroundColor: '#555', // Darker shade for cancel button
+    marginTop: 15, 
+    backgroundColor: '#555', 
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
     alignItems: 'center',
-    width: '80%', // Adjust button width
+    width: '80%', 
   },
   cancelButtonText: {
     color: 'white',
