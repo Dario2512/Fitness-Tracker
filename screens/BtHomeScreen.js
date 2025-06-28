@@ -27,6 +27,7 @@ const BtHomeScreen = () => {
   const [location, setLocation] = useState(null);
   const [emergencyNumber, setEmergencyNumber] = useState('');
   const [emergencyName, setEmergencyName] = useState('');
+  const [emergencyReason, setEmergencyReason] = useState('');
   const [bluetoothModalVisible, setBluetoothModalVisible] = useState(false);
   const [availableDevices, setAvailableDevices] = useState([]);
   const [connectedDevice, setConnectedDevice] = useState(null);
@@ -99,7 +100,7 @@ const BtHomeScreen = () => {
     if (auth.currentUser) {
       const userId = auth.currentUser.uid;
       try {
-        const response = await fetch(`https://0779-178-220-185-88.ngrok-free.app/api/measurements/last?userId=${userId}`);
+        const response = await fetch(`https://e23b-178-220-185-88.ngrok-free.app/api/measurements/last?userId=${userId}`);
         if (response.ok) {
           const data = await response.json();
           if (data) {
@@ -232,21 +233,19 @@ const BtHomeScreen = () => {
         temperature: averageTemperature,
       });
   
-      // Check for abnormal values
-      if (averageHeartRate < 50 || averageHeartRate > 150 || 
-          averageSpO2 < 90 || averageTemperature < 35.1 || 
-          averageTemperature > 37.5) {
+      const reason = getEmergencyReason(averageHeartRate, averageSpO2, averageTemperature);
+      if (reason) {
+        setEmergencyReason(reason);
         setModalVisible(true);
-  
         setTimeout(() => {
           if (modalVisible) {
             redirectToPhoneApp();
           }
-        }, 5000);        
+        }, 5000);
       }
   
       try {
-        const response = await fetch(`https://0779-178-220-185-88.ngrok-free.app/api/measurements?userId=${auth.currentUser.uid}`, {
+        const response = await fetch(`https://e23b-178-220-185-88.ngrok-free.app/api/measurements?userId=${auth.currentUser.uid}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -275,6 +274,33 @@ const BtHomeScreen = () => {
       animateHeart(false);
     }
   };
+
+  function getEmergencyReason(heartRate, spO2, temperature) {
+    let reason = '';
+
+    // Heart Rate
+    if (heartRate < 30) reason += 'extremely low heart rate ';
+    else if (heartRate < 40) reason += 'very low heart rate ';
+    else if (heartRate < 50) reason += 'low heart rate ';
+    else if (heartRate > 180) reason += 'extremely high heart rate ';
+    else if (heartRate > 140) reason += 'very high heart rate ';
+    else if (heartRate > 120) reason += 'high heart rate ';
+
+    // SpO2
+    if (spO2 < 80) reason += 'dangerously low oxygen saturation ';
+    else if (spO2 < 85) reason += 'very low oxygen saturation) ';
+    else if (spO2 < 90) reason += 'low oxygen saturation ';
+    else if (spO2 < 94) reason += 'slightly low oxygen saturation ';
+
+    // Temperature
+    if (temperature < 32) reason += 'body temperature extremely low ';
+    else if (temperature < 35.1) reason += 'body temperature low ';
+    else if (temperature > 41) reason += 'life-threatening fever ';
+    else if (temperature > 39.5) reason += 'very high fever ';
+    else if (temperature > 37.5) reason += 'mild fever ';
+
+    return reason.trim();
+  }
   
 
   
@@ -584,7 +610,12 @@ const BtHomeScreen = () => {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalLabel}>Are you feeling well?</Text>
-            <Text style={styles.timerText}>Time remaining: {timer}s</Text>
+            {emergencyReason ? (
+              <Text style={styles.emergencyReasonText}>
+                You have {emergencyReason}.
+              </Text>
+            ) : null}
+            <Text style={styles.timerText}>{timer}s</Text>
             <TouchableOpacity style={styles.closeButton} onPress={handleYes}>
               <Text style={styles.buttonText}>Yes</Text>
             </TouchableOpacity>

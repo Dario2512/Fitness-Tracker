@@ -46,7 +46,7 @@ const SignInScreen = ({ navigation }) => {
         style={stylesSign.logo}
       />
       {/* app name */}
-      <Text style={stylesSign.appName}>Life Tracker</Text>
+      <Text style={stylesSign.appName}>Trackario</Text>
 
       <TextInput
         style={stylesSign.input}

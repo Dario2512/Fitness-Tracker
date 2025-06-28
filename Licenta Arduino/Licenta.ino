@@ -31,16 +31,15 @@ void setup() {
   Serial.begin(115200);
   Wire.begin();
 
-  // Setup MAX30205 (temperature sensor)
+  // Setup MAX30205
   tempSensor.begin(0x48);
 
-  // Setup MAX30100 (heart rate + SpO2)
+  // Setup MAX30100
   if (!pox.begin()) {
     Serial.println("MAX30100 init failed. Check wiring!");
-    while (1); // Stop here if sensor not found
+    while (1);
   }
 
-  // Optional: Set callback on heartbeat
   pox.setOnBeatDetectedCallback([]() {
     Serial.println("Beat!");
   });
@@ -69,10 +68,8 @@ void setup() {
 }
 
 void loop() {
-  // Required for MAX30100 to process samples
   pox.update();
 
-  // Send once per second
   if (deviceConnected && millis() - lastUpdate > 1000) {
     lastUpdate = millis();
 
@@ -80,7 +77,6 @@ void loop() {
     uint8_t spo2 = pox.getSpO2();
     float temp = tempSensor.readTemperature();
 
-    // Send as string: "bpm,spo2,temp"
     String data = String(bpm, 1) + "," + String(spo2) + "," + String(temp, 1);
     pCharacteristic->setValue(data.c_str());
     pCharacteristic->notify();
