@@ -1,5 +1,5 @@
 import { EmailAuthProvider, reauthenticateWithCredential, updatePassword } from 'firebase/auth';
-import { auth } from './firebase/firebaseConfig';
+import { auth } from '../firebase/firebaseConfig';
 
 export const changePassword = async (currentPassword: string, newPassword: string) => {
   const user = auth.currentUser;

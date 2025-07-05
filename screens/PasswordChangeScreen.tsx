@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { Alert, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { changePassword } from '../backend/passwordChangeHandler';
+import { changePassword } from '../backend/utils/passwordChangeHandler';
 import styles from './styles/stylesPasswordChange';
 
 const PasswordChangeScreen: React.FC = () => {

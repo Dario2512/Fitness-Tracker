@@ -5,7 +5,7 @@ import { auth } from '../backend/firebase/firebaseConfig';
 import { formatDate } from '../utils/formatDate';
 import styles from './styles/stylesSteps';
 import Constants from "expo-constants";
-
+import { BACKEND_URL } from '../utils/constants';
 
 const StepCounterScreen: React.FC = () => {
   const [currentSteps, setCurrentSteps] = useState(0); // Steps counted in the current session
@@ -69,7 +69,7 @@ const StepCounterScreen: React.FC = () => {
     if (auth.currentUser) {
       const userId = auth.currentUser.uid;
       try {
-        const response = await fetch(`https://fce6-178-220-185-182.ngrok-free.app/api/steps/weekly?userId=${userId}`);
+        const response = await fetch(`${BACKEND_URL}/api/steps/weekly?userId=${userId}`);
         if (response.ok) {
           const data = await response.json();
           setWeeklySteps(data);
@@ -87,7 +87,7 @@ const StepCounterScreen: React.FC = () => {
       const userId = auth.currentUser.uid;
       const today = new Date().toISOString().split('T')[0];
       try {
-        const response = await fetch(`https://fce6-178-220-185-182.ngrok-free.app/api/steps/weekly?userId=${userId}`);
+        const response = await fetch(`${BACKEND_URL}/api/steps/weekly?userId=${userId}`);
         if (response.ok) {
           const data: { id: string; date: string; steps: number; caloriesBurned?: number }[] = await response.json(); // Explicitly type the data array
           const todaySteps = data.find((step) => step.date === today);
@@ -106,7 +106,7 @@ const StepCounterScreen: React.FC = () => {
       const userId = auth.currentUser.uid;
       const date = new Date().toISOString().split('T')[0];
       try {
-        const response = await fetch(`https://fce6-178-220-185-182.ngrok-free.app/api/steps/update`, {
+        const response = await fetch(`${BACKEND_URL}/api/steps/update`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

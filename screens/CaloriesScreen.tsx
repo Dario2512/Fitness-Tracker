@@ -4,10 +4,10 @@ import { TouchableOpacity } from 'react-native';
 import { auth } from '../backend/firebase/firebaseConfig'; 
 import styles from './styles/stylesCalories';
 import Constants from "expo-constants";
-
+import { BACKEND_URL } from '../utils/constants';
 
 interface CalorieEntry {
-  date: any; // Can be a string or Firestore Timestamp
+  date: any;
   calories: number;
   foodName?: string;
   foodWeight?: string;
@@ -34,7 +34,7 @@ const CaloriesScreen = () => {
   // Fetch today's calories
   const fetchTodaysCalories = async () => {
     try {
-      const response = await fetch(`https://fce6-178-220-185-182.ngrok-free.app/todaysCalories?userId=${userId}`);
+      const response = await fetch(`${BACKEND_URL}/todaysCalories?userId=${userId}`);
       const data = await response.json();
       setTodayCalories(data.calories || 0);
     } catch (error) {
@@ -45,7 +45,7 @@ const CaloriesScreen = () => {
   // Fetch weekly calories
   const fetchWeeklyCalories = async () => {
     try {
-      const response = await fetch(`https://fce6-178-220-185-182.ngrok-free.app/weeklyCalories?userId=${userId}`);
+      const response = await fetch(`${BACKEND_URL}/weeklyCalories?userId=${userId}`);
       const data = await response.json();
       const groupedData = groupCaloriesByDate(data.weeklyCalories || []);
       setWeeklyCalories(groupedData);
@@ -99,7 +99,7 @@ const CaloriesScreen = () => {
     }
   
     try {
-      const response = await fetch(`https://fce6-178-220-185-182.ngrok-free.app/incrementFoodCalories`, {
+      const response = await fetch(`${BACKEND_URL}/incrementFoodCalories`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

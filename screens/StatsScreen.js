@@ -106,8 +106,8 @@ const StatsScreen = () => {
 
   const renderMeasurement = ({ item }) => (
     <View style={styles.card}>
-      <Text style={styles.cardText}>Heart Rate: {item.heartRate} bpm</Text>
-      <Text style={styles.cardText}>SpO2: {item.spO2} %</Text>
+      <Text style={styles.cardText}>Heart Rate: {item.heartRate.toFixed(1)} bpm</Text>
+      <Text style={styles.cardText}>SpO2: {item.spO2.toFixed(1)} %</Text>
       <Text style={styles.cardText}>Temperature: {item.temperature.toFixed(1)} °C</Text>
       <Text style={styles.cardText}>
         Time: {new Date(item.timestamp.seconds * 1000).toLocaleString()}

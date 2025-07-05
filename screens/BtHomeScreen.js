@@ -12,6 +12,7 @@ import settingsIcon from './images/Gear.png';
 import heartIcon from './images/HeartV2.png';
 import styles from './styles/styles';
 import Constants from "expo-constants";
+import { BACKEND_URL } from '../utils/constants';
 
 const manager = new BleManager();
 let timerInterval;
@@ -100,7 +101,7 @@ const BtHomeScreen = () => {
     if (auth.currentUser) {
       const userId = auth.currentUser.uid;
       try {
-        const response = await fetch(`https://dbc7-178-220-185-88.ngrok-free.app/api/measurements/last?userId=${userId}`);
+        const response = await fetch(`${BACKEND_URL}/api/measurements/last?userId=${userId}`);
         if (response.ok) {
           const data = await response.json();
           if (data) {
@@ -245,7 +246,7 @@ const BtHomeScreen = () => {
       }
   
       try {
-        const response = await fetch(`https://dbc7-178-220-185-88.ngrok-free.app/api/measurements?userId=${auth.currentUser.uid}`, {
+        const response = await fetch(`${BACKEND_URL}/api/measurements?userId=${auth.currentUser.uid}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -454,7 +455,7 @@ const BtHomeScreen = () => {
       }
 
     setAvailableDevices((prevDevices) => {
-      if (device.name !== "Trackario") return prevDevices;
+      //if (device.name !== "Trackario") return prevDevices;
       const deviceExists = prevDevices.some((d) => d.id === device.id);
       if (!deviceExists) {
         return [...prevDevices, device];

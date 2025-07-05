@@ -1,4 +1,4 @@
-const { db } = require('./firebase/firebaseConfigBackend');
+const { db } = require('../firebase/firebaseConfigBackend');
 
 const getWeeklySteps = async (userId) => {
   const stepsRef = db.collection('users').doc(userId).collection('steps');

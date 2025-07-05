@@ -19,9 +19,8 @@ A complete health monitoring app: track vital signs via Bluetooth, count steps, 
 ## Project Structure
 
 - `/screens` – React Native/Expo screens and UI components
-- `/screens/styles` – Style files for each screen
 - `/backend` – Node.js/Express backend (REST API, Firebase)
-- `/Licenta Arduino` – Arduino code for the Bluetooth sensor
+- `/Hardware` – Arduino IDE code for the physical device
 
 ---
 
@@ -69,7 +68,7 @@ Start the backend server:
 
 
 ### 6. ESP32 physical device
-- Open /Licenta Arduino/Licenta.ino in Arduino IDE.
+- Open /Hardware/ESP32.ino in Arduino IDE.
 Select the correct board and port(ESP32 Dev module).
 Upload the sketch to your ESP32 device.
 

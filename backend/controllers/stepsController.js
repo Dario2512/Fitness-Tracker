@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getWeeklySteps, updateSteps } = require('./stepsService');
+const { getWeeklySteps, updateSteps } = require('../services/stepsService');
 
 router.get('/weekly', async (req, res) => {
   const { userId } = req.query;
